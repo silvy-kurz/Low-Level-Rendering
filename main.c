@@ -1,8 +1,12 @@
 #include <SDL2/SDL.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 2000  
+#define HEIGHT 2000
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -45,13 +49,13 @@ int main() {
                     running = false;
             }
         }
-
+        
         // Fill the buffer with a gradient
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                Uint8 r = x % 256;
-                Uint8 g = y % 256;
-                Uint8 b = (x + y) % 256;
+                Uint8 r = 0; 
+                Uint8 g = 0; 
+                Uint8 b = 0; 
                 pixels[y * WIDTH + x] = (255 << 24) | (r << 16) | (g << 8) | b;
             }
         }
