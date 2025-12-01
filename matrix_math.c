@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 int random_integer(int low, int high) {
     return low + arc4random_uniform(high - low + 1);
@@ -84,7 +85,21 @@ struct screen_vector normalise(const struct screen_vector vector) {
   return normalised_vector;
 }
 
- struct world_vector* create_random_triangle_vectors(float min_x, float max_x, 
+void log_vector(const struct screen_vector vector) {
+  printf("Vector: (%f, %f)\n", vector.x, vector.y);
+}
+
+void log_world_vector(const struct world_vector vector) {
+  printf("Vector: (%f, %f, %f)\n", vector.x, vector.y, vector.z);
+}
+void log_colour(int colour) {
+  uint8_t a = (colour >> 24) & 0xFF;
+  uint8_t r = (colour >> 16) & 0xFF;
+  uint8_t g = (colour >> 8) & 0xFF;
+  uint8_t b = (colour >> 0) & 0xFF;
+  printf("Colour %d: (%u,%u,%u)\n", colour, r, g, b, a);
+}
+struct world_vector* create_random_triangle_vectors(float min_x, float max_x, 
                                                      float min_y, float max_y, 
                                                      float min_z, float max_z, int number_of_triangles) {
   struct world_vector* random_triangle_vectors = malloc(sizeof(struct world_vector) * number_of_triangles * 3);
@@ -100,12 +115,17 @@ struct screen_vector normalise(const struct screen_vector vector) {
   return random_triangle_vectors;
 }
 
-void log_vector(const struct screen_vector vector) {
-  printf("Vector (%f, %f)\n", vector.x, vector.y);
-}
+int* create_random_triangle_colours(int number_of_triangles) {
+  int* random_colours = malloc(sizeof(int) * number_of_triangles);
+  for (int colour_num = 0; colour_num < number_of_triangles; colour_num++) {
+      Uint8 r = random_integer(0, 255); 
+      Uint8 g = random_integer(0, 255); 
+      Uint8 b = random_integer(0, 255); 
+      int rand_colour = 0 << 24 | r << 16 | g << 8 | b;
+      random_colours[colour_num] = rand_colour;
+  }
 
-void log_world_vector(const struct world_vector vector) {
-  printf("Vector (%f, %f, %f)\n", vector.x, vector.y, vector.z);
+  return random_colours;
 }
 
 int main(int argc, char *argv[]) {
@@ -130,6 +150,7 @@ int main(int argc, char *argv[]) {
 
   int triangle_num = 2;
   struct world_vector* triangle_vectors = create_random_triangle_vectors(0, 99.9, 0, 99.9, 0, 99.9, triangle_num);
+  int* triangle_colours = create_random_triangle_colours(triangle_num);
   for (int i = 0; i < triangle_num; i++) {
     printf("First triangle vector:\n");
     log_world_vector(triangle_vectors[i * 3 + 0]);
@@ -140,6 +161,8 @@ int main(int argc, char *argv[]) {
     printf("Third triangle vector:\n");
     log_world_vector(triangle_vectors[i * 3 + 2]);
     printf("  \n");
+    printf("Triangle colour\n");
+    log_colour(triangle_colours[i]);
     printf("=====\n");
   }
   return 0;
