@@ -42,18 +42,18 @@ struct screen_vector subtract_vector(const struct screen_vector vector_a, const 
     return difference_vector; 
 }
 
-struct screen_vector multiply_vector(const struct screen_vector vector_a, const struct screen_vector vector_b) {
+struct screen_vector multiply_vector(const struct screen_vector vector, float scalar) { 
     struct screen_vector product_vector;
-    product_vector.x = vector_a.x * vector_b.x;
-    product_vector.y = vector_a.y * vector_b.y;
+    product_vector.x = vector.x * scalar; 
+    product_vector.y = vector.y * scalar; 
 
     return product_vector; 
 }
 
-struct screen_vector divide_vector(const struct screen_vector vector_a, const struct screen_vector vector_b) {
+struct screen_vector divide_vector(const struct screen_vector vector, const float scalar) {
     struct screen_vector qoutient_vector;
-    qoutient_vector.x = vector_a.x / vector_b.x;
-    qoutient_vector.y = vector_a.y / vector_b.y;
+    qoutient_vector.x = vector.x / scalar; 
+    qoutient_vector.y = vector.y / scalar; 
 
     return qoutient_vector; 
 }
@@ -128,6 +128,42 @@ int* create_random_triangle_colours(int number_of_triangles) {
   return random_colours;
 }
 
+bool is_point_in_triangle(const struct screen_vector vector_a, const struct screen_vector vector_b, const struct screen_vector vector_c, const struct screen_vector screen_point) {
+  float point_to_a_area = dot_product(
+    subtract_vector(screen_point, vector_a), 
+    perpendicularise(subtract_vector(vector_b, vector_a))
+  ) / 2;
+
+  float point_to_b_area = dot_product(
+    subtract_vector(screen_point, vector_a), 
+    perpendicularise(subtract_vector(vector_b, vector_a))
+  ) / 2;
+
+  float point_to_c_area = dot_product(
+    subtract_vector(screen_point, vector_a), 
+    perpendicularise(subtract_vector(vector_b, vector_a))
+  ) / 2;
+
+    bool sign_p_to_a = point_to_a_area >= 0;
+    bool sign_p_to_b = point_to_a_area >= 0;
+    bool sign_p_to_c = point_to_a_area >= 0;
+
+    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
+}
+
+struct screen_vector world_space_to_screen_space_mao(const struct world_vector vector_in_world, 
+                                                     const struct screen_vector pixels_number_vector,
+                                                     float FOV, float smaller_dimension) {
+    float total_units_visible = tan(FOV / 2) * 2;    
+    float pixel_scaling_factor = smaller_dimension / total_units_visible;
+    
+    struct screen_vector offset_vector = {vector_in_world.x, vector_in_world.y};
+    struct screen_vector pixel_offset =  multiply_vector(offset_vector, pixel_scaling_factor);
+    struct screen_vector final_converted_screen_space_vector = add_vector(pixel_offset, divide_vector(pixels_number_vector, 2));
+
+    return final_converted_screen_space_vector; 
+}
+
 int main(int argc, char *argv[]) {
 
   printf("this file will contain all the matrix math implementations\n");
@@ -137,8 +173,8 @@ int main(int argc, char *argv[]) {
   log_vector(add_vector(test_vector_a, test_vector_b)); 
   // test for addition
   log_vector(add_vector(test_vector_a, test_vector_b)); 
-  log_vector(divide_vector(test_vector_b, test_vector_c)); 
-  log_vector(multiply_vector(test_vector_b, test_vector_c));
+  log_vector(divide_vector(test_vector_b, 4.3)); 
+  log_vector(multiply_vector(test_vector_b, 8.6));
   float dot = dot_product(test_vector_b, test_vector_c);
   float len = length_vector(test_vector_b);
   printf("%f\n", dot);
