@@ -119,26 +119,21 @@ int* create_random_triangle_colours(int number_of_triangles) {
   return random_colours;
 }
 
-bool is_point_in_triangle(const struct screen_vector vector_a, const struct screen_vector vector_b, 
-                          const struct screen_vector vector_c, const struct screen_vector screen_point) {
+bool is_point_right_side_line(const struct screen_vector vector_a, const struct screen_vector vector_b, const struct screen_vector screen_point) {
   float point_to_a_area = dot_product(
-    subtract_vector(screen_point, vector_a), 
+    subtract_vector(screen_point, vector_a),
     perpendicularise(subtract_vector(vector_b, vector_a))
   ) / 2;
 
-  float point_to_b_area = dot_product(
-    subtract_vector(screen_point, vector_b), 
-    perpendicularise(subtract_vector(vector_c, vector_b))
-  ) / 2;
+  return point_to_a_area >= 0;
+}
 
-  float point_to_c_area = dot_product(
-    subtract_vector(screen_point, vector_c), 
-    perpendicularise(subtract_vector(vector_a, vector_c))
-  ) / 2;
+bool is_point_in_triangle(const struct screen_vector vector_a, const struct screen_vector vector_b, 
+                          const struct screen_vector vector_c, const struct screen_vector screen_point) {
 
-    bool sign_p_to_a = point_to_a_area >= 0;
-    bool sign_p_to_b = point_to_b_area >= 0;
-    bool sign_p_to_c = point_to_c_area >= 0;
+    bool sign_p_to_a = is_point_right_side_line(vector_a, vector_b, screen_point);
+    bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, screen_point);
+    bool sign_p_to_c = 
 
     return sign_p_to_a && sign_p_to_b && sign_p_to_c;
 }

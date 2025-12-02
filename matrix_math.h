@@ -50,6 +50,12 @@ struct world_vector* create_random_triangle_vectors(
 int* create_random_triangle_colours(int number_of_triangles);
 
 // ---------- Triangle operations ----------
+bool is_point_right_side_line(
+  struct screen_vector vector_a,
+  struct screen_vector vector_b,
+  struct screen_vector screen_point
+);
+
 bool is_point_in_triangle(
     struct screen_vector a,
     struct screen_vector b,
