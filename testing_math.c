@@ -45,6 +45,21 @@ int main(int argc, char *argv[]) {
     log_colour(triangle_colours[i]);
     printf("=====\n");
   }
-  printf("%b \n", is_point_right_side_line(test_vector_b, test_vector_c, test_vector_a));
+
+  struct matrix testing_matrix = create_randomised_matrix(initalise_null_matrix(4,4), 0, 10);
+  struct matrix testing_matrix_a = initalise_null_matrix(2,2);
+  struct matrix testing_matrix_b = initalise_null_matrix(2,2);
+  testing_matrix_a.data[0][0] = 3;
+  testing_matrix_a.data[0][1] = 5;
+  testing_matrix_a.data[1][0] = 1;
+  testing_matrix_a.data[1][1] = 2;
+  testing_matrix_b.data[0][0] = 2;
+  testing_matrix_b.data[0][1] = 4;
+  testing_matrix_b.data[1][0] = 1;
+  testing_matrix_b.data[1][1] = 2;
+  log_matrix(testing_matrix);
+  log_matrix(testing_matrix_a);
+  log_matrix(testing_matrix_b);
+  log_matrix(multiply_matrix(testing_matrix_a, testing_matrix_b));
   return 0;
 }

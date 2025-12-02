@@ -76,12 +76,90 @@ struct screen_vector normalise(const struct screen_vector vector) {
   return normalised_vector;
 }
 
+
+
+
+struct matrix initalise_null_matrix(int coloumn_number, int row_number) {
+  float** matrix_data = malloc(sizeof(float*) * row_number);
+  for (int row_index = 0; row_index < row_number; row_index++) {
+    matrix_data[row_index] = malloc(sizeof(float) * coloumn_number);
+
+  };
+  struct matrix null_matrix = {coloumn_number, row_number, matrix_data};
+  return null_matrix;
+}
+
+struct matrix multiply_matrix(const struct matrix matrix_a, const struct matrix matrix_b) {
+  struct matrix product_matrix = initalise_null_matrix(matrix_a.rows, matrix_b.coloumns);
+  float** a_data = matrix_a.data;
+  float** b_data = matrix_b.data;
+  for (int product_row_index = 0; product_row_index < product_matrix.rows; product_row_index++) {
+    for (int product_coloumn_index = 0; product_coloumn_index < product_matrix.coloumns; product_coloumn_index++) {
+      float dot_product = 0; 
+      for (int a_coloumn_index = 0; a_coloumn_index < matrix_a.coloumns; a_coloumn_index++) {
+        dot_product += a_data[product_row_index][a_coloumn_index] * b_data[a_coloumn_index][product_coloumn_index]; 
+       }
+      product_matrix.data[product_row_index][product_coloumn_index] = dot_product;
+    }
+  } 
+
+
+  return product_matrix;
+}
+
+bool is_point_right_side_line(const struct screen_vector vector_a, const struct screen_vector vector_b, const struct screen_vector screen_point) {
+  float point_to_a_area = dot_product(
+    subtract_vector(screen_point, vector_a),
+    perpendicularise(subtract_vector(vector_b, vector_a))
+  ) / 2;
+
+  return point_to_a_area >= 0;
+}
+
+bool is_point_in_triangle(const struct screen_vector vector_a, const struct screen_vector vector_b, 
+                          const struct screen_vector vector_c, const struct screen_vector screen_point) {
+
+    bool sign_p_to_a = is_point_right_side_line(vector_a, vector_b, screen_point);
+    bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, screen_point);
+    bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, screen_point);
+
+    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
+}
+
+struct screen_vector world_space_to_screen_space_map(const struct world_vector vector_in_world, 
+                                                     const struct screen_vector pixels_number_vector,
+                                                     float FOV, float smaller_dimension) {
+    float total_units_visible = tan(FOV / 2) * 2;    
+    float pixel_scaling_factor = smaller_dimension / total_units_visible;
+    
+    struct screen_vector offset_vector = {vector_in_world.x, vector_in_world.y};
+    struct screen_vector pixel_offset =  multiply_vector(offset_vector, pixel_scaling_factor);
+    struct screen_vector final_converted_screen_space_vector = add_vector(pixel_offset, divide_vector(pixels_number_vector, 2));
+
+    return final_converted_screen_space_vector; 
+}
+
 void log_vector(const struct screen_vector vector) {
   printf("Vector: (%f, %f)\n", vector.x, vector.y);
 }
 
 void log_world_vector(const struct world_vector vector) {
   printf("Vector: (%f, %f, %f)\n", vector.x, vector.y, vector.z);
+}
+
+void log_matrix(const struct matrix input_matrix) {
+  printf("%p Matrix data\n", input_matrix.data);
+  printf("%d x %d Matrix: \n", input_matrix.rows, input_matrix.coloumns);
+  printf("{\n");
+  for (int row_index = 0; row_index < input_matrix.rows; row_index++) {
+    printf("  {");
+    for (int coloumn_index = 0; coloumn_index < input_matrix.coloumns; coloumn_index++) {
+
+      printf("%f ", input_matrix.data[row_index][coloumn_index]);
+    }
+    printf("}\n");
+  }
+  printf("}\n");
 }
 void log_colour(int colour) {
   uint8_t a = (colour >> 24) & 0xFF;
@@ -90,6 +168,8 @@ void log_colour(int colour) {
   uint8_t b = (colour >> 0) & 0xFF;
   printf("Colour %d: (%u,%u,%u)\n", colour, r, g, b, a);
 }
+
+
 struct world_vector* create_random_triangle_vectors(float min_x, float max_x, 
                                                      float min_y, float max_y, 
                                                      float min_z, float max_z, int number_of_triangles) {
@@ -119,35 +199,14 @@ int* create_random_triangle_colours(int number_of_triangles) {
   return random_colours;
 }
 
-bool is_point_right_side_line(const struct screen_vector vector_a, const struct screen_vector vector_b, const struct screen_vector screen_point) {
-  float point_to_a_area = dot_product(
-    subtract_vector(screen_point, vector_a),
-    perpendicularise(subtract_vector(vector_b, vector_a))
-  ) / 2;
+struct matrix create_randomised_matrix(struct matrix matrix, float min_value, float max_value) {
+  float** matrix_data = matrix.data;
+  for (int row_index = 0; row_index < matrix.rows; row_index++) {
+    for (int coloumn_index = 0; coloumn_index < matrix.coloumns; coloumn_index++) {
+      matrix_data[row_index][coloumn_index] = random_float(min_value, max_value);
+    }
+  }
 
-  return point_to_a_area >= 0;
+  struct matrix randomised_matrix = {matrix.rows, matrix.coloumns, matrix_data};
+  return randomised_matrix;
 }
-
-bool is_point_in_triangle(const struct screen_vector vector_a, const struct screen_vector vector_b, 
-                          const struct screen_vector vector_c, const struct screen_vector screen_point) {
-
-    bool sign_p_to_a = is_point_right_side_line(vector_a, vector_b, screen_point);
-    bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, screen_point);
-    bool sign_p_to_c = 
-
-    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
-}
-
-struct screen_vector world_space_to_screen_space_map(const struct world_vector vector_in_world, 
-                                                     const struct screen_vector pixels_number_vector,
-                                                     float FOV, float smaller_dimension) {
-    float total_units_visible = tan(FOV / 2) * 2;    
-    float pixel_scaling_factor = smaller_dimension / total_units_visible;
-    
-    struct screen_vector offset_vector = {vector_in_world.x, vector_in_world.y};
-    struct screen_vector pixel_offset =  multiply_vector(offset_vector, pixel_scaling_factor);
-    struct screen_vector final_converted_screen_space_vector = add_vector(pixel_offset, divide_vector(pixels_number_vector, 2));
-
-    return final_converted_screen_space_vector; 
-}
-
