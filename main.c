@@ -4,9 +4,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-#define WIDTH 2000  
-#define HEIGHT 2000
+#include "matrix_math.h"
+#define WIDTH 800  
+#define HEIGHT 800
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -36,6 +36,30 @@ int main() {
 
     // Example pixel buffer
     Uint32 *pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
+    struct screen_vector pixels_size_vector = {WIDTH, HEIGHT};
+    float FOV_input = 60;
+    float FOV = FOV_input * (M_PI / 180.0f);
+    float smallest_screen_dimension = pixels_size_vector.x;
+    
+    int triangle_number = 5;
+    struct world_vector* randomised_triangle_vectors = create_random_triangle_vectors(0, WIDTH - 1, 0, WIDTH - 1, 0, WIDTH - 1,
+                                                                                      triangle_number);
+    int* randomised_colours = create_random_triangle_colours(triangle_number);
+    
+    for (int i = 0; i < triangle_number; i++) {
+      printf("First triangle vector:\n");
+      log_world_vector(randomised_triangle_vectors[i * 3 + 0]);
+      printf("  \n");
+      printf("Second triangle vector:\n");
+      log_world_vector(randomised_triangle_vectors[i * 3 + 1]);
+      printf("  \n");
+      printf("Third triangle vector:\n");
+      log_world_vector(randomised_triangle_vectors[i * 3 + 2]);
+      printf("  \n");
+      printf("Triangle colour\n");
+      log_colour(randomised_colours[i]);
+      printf("=====\n");
+    }
 
     while (running) {
         // Handle events
@@ -50,7 +74,7 @@ int main() {
             }
         }
         
-        // Fill the buffer with a gradient
+        // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 Uint8 r = 0; 
