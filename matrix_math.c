@@ -161,6 +161,28 @@ void log_matrix(const struct matrix input_matrix) {
   }
   printf("}\n");
 }
+
+void log_triangle_vectors(const struct world_vector* triangle_vectors, int* triangle_colours, int triangle_num) {
+  for (int i = 0; i < triangle_num; i++) {
+    printf("Triangle %d:\n", i);
+    printf("  First triangle vector:\n");
+    printf("  ");
+    log_world_vector(triangle_vectors[i * 3 + 0]);
+    printf("  \n");
+    printf("  Second triangle vector:\n");
+    printf("  ");
+    log_world_vector(triangle_vectors[i * 3 + 1]);
+    printf("  \n");
+    printf("  Third triangle vector:\n");
+    printf("  ");
+    log_world_vector(triangle_vectors[i * 3 + 2]);
+    printf("  \n");
+    printf("  Triangle colour\n");
+    printf("  ");
+    log_colour(triangle_colours[i]);
+    printf("  =====\n");
+  }
+}
 void log_colour(int colour) {
   uint8_t a = (colour >> 24) & 0xFF;
   uint8_t r = (colour >> 16) & 0xFF;
@@ -169,6 +191,44 @@ void log_colour(int colour) {
   printf("Colour %d: (%u,%u,%u)\n", colour, r, g, b, a);
 }
 
+struct world_vector* add_cube_to_world_vectors(struct world_vector* current_world_vectors, int current_triangle_number, 
+                                               struct world_vector cube_starting_point, float cube_side_length) {
+  struct world_vector* new_world_vectors = malloc(sizeof(struct world_vector) *  (current_triangle_number + 2)* 3);
+  for (int vector_num = 0; vector_num < current_triangle_number * 3; vector_num ++) {
+    new_world_vectors[vector_num] = current_world_vectors[vector_num];
+  }
+  
+  float triangle_hypotenuse = sqrtf(2 * cube_side_length * cube_side_length);
+  // left front facing triangle 
+  new_world_vectors[(current_triangle_number + 0) * 3 + 0] = (struct world_vector){
+    cube_starting_point.x + 0, 
+    cube_starting_point.y + 0, 
+    cube_starting_point.z + 0};
+  new_world_vectors[(current_triangle_number + 0) * 3 + 1] = (struct world_vector){
+    cube_starting_point.x + cube_side_length, 
+    cube_starting_point.y + 0, 
+    cube_starting_point.z + 0}; 
+  new_world_vectors[(current_triangle_number + 0) * 3 + 2] = (struct world_vector){
+    cube_starting_point.x + 0, 
+    cube_starting_point.y + cube_side_length, 
+    cube_starting_point.z + 0};
+  // right front facing triangle
+  new_world_vectors[(current_triangle_number + 1) * 3 + 0] = (struct world_vector){
+    cube_starting_point.x + 0, 
+    cube_starting_point.y + cube_side_length, 
+    cube_starting_point.z + 0};
+  new_world_vectors[(current_triangle_number + 1) * 3 + 1] = (struct world_vector){
+    cube_starting_point.x + cube_side_length, 
+    cube_starting_point.y + cube_side_length, 
+    cube_starting_point.z + 0}; 
+  new_world_vectors[(current_triangle_number + 1) * 3 + 2] = (struct world_vector){
+    cube_starting_point.x + cube_side_length, 
+    cube_starting_point.y + 0, 
+    cube_starting_point.z + 0};
+  return new_world_vectors;
+
+
+}
 
 struct world_vector* create_random_triangle_vectors(float min_x, float max_x, 
                                                      float min_y, float max_y, 

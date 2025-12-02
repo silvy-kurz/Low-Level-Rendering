@@ -41,11 +41,14 @@ int main() {
     float FOV = FOV_input * (M_PI / 180.0f);
     float smallest_screen_dimension = pixels_size_vector.x;
     
-    int triangle_number = 10;
+    int triangle_number = 0;
     struct world_vector* randomised_triangle_vectors = create_random_triangle_vectors(0, WIDTH - 1, 0, WIDTH - 1, 0, WIDTH - 1,
                                                                                       triangle_number);
+    struct world_vector starting_point = {250,250,250};
+    randomised_triangle_vectors = add_cube_to_world_vectors(randomised_triangle_vectors, triangle_number, starting_point, 1000);
+    triangle_number = triangle_number + 2;
     int* randomised_colours = create_random_triangle_colours(triangle_number);
-    
+    log_triangle_vectors(randomised_triangle_vectors, randomised_colours, triangle_number);
 
     while (running) {
         // Handle events

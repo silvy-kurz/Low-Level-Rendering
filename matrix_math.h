@@ -67,9 +67,13 @@ struct screen_vector world_space_to_screen_space_map(
 void log_vector(struct screen_vector vector);
 void log_world_vector(struct world_vector vector);
 void log_matrix(struct matrix matrix);
+void log_triangle_vectors(const struct world_vector* triangle_vectors, int* triangle_colours, int triangle_num);
 void log_colour(int colour);
 
 // ---------- Random geometry ----------
+struct world_vector* add_cube_to_world_vectors(struct world_vector* current_world_vectors, int current_triangle_number, 
+                                               struct world_vector cube_starting_point, float cube_side_length);
+
 struct world_vector* create_random_triangle_vectors(
     float min_x, float max_x,
     float min_y, float max_y,
