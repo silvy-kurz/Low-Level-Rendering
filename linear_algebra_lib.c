@@ -1,0 +1,465 @@
+#include "linear_algebra_lib.h"
+#include <SDL2/SDL.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+
+//
+// ======== VECTOR ARITHMETIC ========
+//
+
+struct vector_2d add_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return (struct vector_2d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y};
+}
+
+struct vector_2d subtract_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return (struct vector_2d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y};
+}
+
+struct vector_2d multiply_vector_2d_scalar(struct vector_2d vector, float scalar) {
+  return (struct vector_2d) {vector.x * scalar, vector.y * scalar};
+}
+
+struct vector_2d divide_vector_2d_scalar(struct vector_2d vector, float scalar) {
+  return (struct vector_2d) {vector.x / scalar, vector.y / scalar};
+}
+
+struct vector_2d cross_product_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return (struct vector_2d) {0,0}; // TODO: Add in cross product implementation
+}
+
+float length_vector_2d(struct vector_2d vector) {
+  return sqrtf(vector.x * vector.x + vector.y * vector.y);
+}
+
+struct vector_2d normalise_vector_2d(struct vector_2d vector) {
+  float vector_length = length_vector_2d(vector);
+  return (struct vector_2d) {vector.x / vector_length, vector.y / vector_length};
+}
+
+struct vector_2d perpendicularise_vector_2d(struct vector_2d vector) {
+  return (struct vector_2d) {vector.y, -vector.x};
+}
+
+float dot_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return vector_a.x * vector_b.x + vector_a.y * vector_b.y;
+}
+
+
+struct vector_3d add_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+  return (struct vector_3d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y, vector_a.z + vector_b.z};
+}
+
+struct vector_3d subtract_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+  return (struct vector_3d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y, vector_a.z - vector_b.z};
+}
+
+struct vector_3d multiply_vector_3d_scalar(struct vector_3d vector, float scalar) {
+  return (struct vector_3d) {vector.x * scalar, vector.y * scalar, vector.z * scalar};
+}
+
+struct vector_3d divide_vector_3d_scalar(struct vector_3d vector, float scalar) {
+  return (struct vector_3d) {vector.x / scalar, vector.y / scalar, vector.z / scalar};
+}
+
+struct vector_3d cross_product_3d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return (struct vector_3d) {0,0,0}; //TODO: Add in cross product implementation 
+}
+
+float length_vector_3d(struct vector_3d vector) {
+  return sqrtf(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+}
+
+struct vector_3d normalise_vector_3d(struct vector_3d vector) {
+  float vector_length = length_vector_3d(vector);
+  return (struct vector_3d) {vector.x / vector_length, vector.y / vector_length, vector.z / vector_length};
+}
+
+struct vector_3d perpendicularise_vector_3d(struct vector_3d vector) {
+  return (struct vector_3d) {0,0,0}; //TODO: Add in 3d vector perpendicular implementation
+}
+float dot_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+  return vector_a.x + vector_b.x + vector_a.y + vector_b.y + vector_a.z + vector_b.z;
+}
+
+struct vector_2d copy_vector_3d_to_2d(struct vector_2d vector) {
+  return (struct vector_2d) {vector.x, vector.y};
+}
+
+struct vector_3d copy_vector_4d_to_3d(struct vector_4d vector) {
+  return (struct vector_3d) {vector.x, vector.y, vector.z};
+}
+struct vector_4d convert_vector_3d_homogenous_coordinate(struct vector_3d vector) {
+  return (struct vector_4d) {vector.x, vector.y, vector.z, 1};
+}
+
+//
+// ======== MATRIX ARITHMETIC ========
+//
+
+float get_element_matrix_3x3(struct matrix_3x3 *matrix_address, int row_index, int column_index) {
+  return matrix_address->data[3 * row_index + column_index];
+}
+void set_element_matrix_3x3(struct matrix_3x3 *matrix_address, int row_index, int column_index, float value) {
+  matrix_address->data[3 * row_index + column_index] = value;
+}
+
+void initialise_null_matrix_3x3(struct matrix_3x3 *matrix_address) {
+  set_element_matrix_3x3(matrix_address, 0, 0, 0);
+  set_element_matrix_3x3(matrix_address, 0, 1, 0);
+  set_element_matrix_3x3(matrix_address, 0, 2, 0);
+
+  set_element_matrix_3x3(matrix_address, 1, 0, 0);
+  set_element_matrix_3x3(matrix_address, 1, 1, 0);
+  set_element_matrix_3x3(matrix_address, 1, 2, 0);
+
+  set_element_matrix_3x3(matrix_address, 2, 0, 0);
+  set_element_matrix_3x3(matrix_address, 2, 1, 0);
+  set_element_matrix_3x3(matrix_address, 2, 2, 0);
+}
+
+void initialise_identity_matrix_3x3(struct matrix_3x3 *matrix_address) {
+  set_element_matrix_3x3(matrix_address, 0,0,1);
+  set_element_matrix_3x3(matrix_address, 0,1,0);
+  set_element_matrix_3x3(matrix_address, 0,2,0);
+  
+  set_element_matrix_3x3(matrix_address, 1,0,0);
+  set_element_matrix_3x3(matrix_address, 1,1,1);
+  set_element_matrix_3x3(matrix_address, 1,2,0);
+
+  set_element_matrix_3x3(matrix_address, 2,0,0);
+  set_element_matrix_3x3(matrix_address, 2,1,0);
+  set_element_matrix_3x3(matrix_address, 2,2,1);
+}
+
+struct vector_3d multiply_matrix_3x3_v3(struct matrix_3x3 *matrix_address, struct vector_3d vector) {
+  float *data = matrix_address->data;
+  return (struct vector_3d) {
+    data[0] * vector.x +
+    data[1] * vector.y +
+    data[2] * vector.z,
+
+    data[3] * vector.x +
+    data[4] * vector.y +
+    data[5] * vector.z,
+
+    data[6] * vector.x +
+    data[7] * vector.y +
+    data[8] * vector.z,
+  };
+}
+
+void multiply_matrix_3x3(struct matrix_3x3 *matrix_a_address, struct matrix_3x3 *matrix_b_address, struct matrix_3x3 *product_matrix_address) {
+  float *data_a = matrix_a_address->data;
+  float *data_b = matrix_b_address->data;
+  float *out_data = product_matrix_address->data;
+
+  out_data[0] = data_a[0] * data_b[0] + data_a[1] * data_b[3] + data_a[2] * data_b[6];
+  out_data[1] = data_a[0] * data_b[1] + data_a[1] * data_b[4] + data_a[2] * data_b[7];
+  out_data[2] = data_a[0] * data_b[2] + data_a[1] * data_b[5] + data_a[2] * data_b[8];
+
+  out_data[3] = data_a[3] * data_b[0] + data_a[4] * data_b[3] + data_a[5] * data_b[6];
+  out_data[4] = data_a[3] * data_b[1] + data_a[4] * data_b[4] + data_a[5] * data_b[7];
+  out_data[5] = data_a[3] * data_b[2] + data_a[4] * data_b[5] + data_a[5] * data_b[8];
+
+  out_data[6] = data_a[6] * data_b[0] + data_a[7] * data_b[3] + data_a[8] * data_b[6];
+  out_data[7] = data_a[6] * data_b[1] + data_a[7] * data_b[4] + data_a[8] * data_b[7];
+  out_data[8] = data_a[6] * data_b[2] + data_a[7] * data_b[5] + data_a[8] * data_b[8];
+}
+
+
+float get_element_matrix_4x4(struct matrix_4x4 *matrix_address, int row_index, int column_index) { 
+  return matrix_address->data[4 * row_index + column_index];
+}
+
+void set_element_matrix_4x4(struct matrix_4x4 *matrix_address, int row_index, int column_index, float value) {
+  matrix_address->data[4 * row_index + column_index] = value;
+}
+
+void initialise_null_matrix_4x4(struct matrix_4x4 *matrix_address) {
+  set_element_matrix_4x4(matrix_address, 0, 0, 0);
+  set_element_matrix_4x4(matrix_address, 0, 1, 0);
+  set_element_matrix_4x4(matrix_address, 0, 2, 0);
+  set_element_matrix_4x4(matrix_address, 0, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 1, 0, 0);
+  set_element_matrix_4x4(matrix_address, 1, 1, 0);
+  set_element_matrix_4x4(matrix_address, 1, 2, 0);
+  set_element_matrix_4x4(matrix_address, 1, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 2, 0, 0);
+  set_element_matrix_4x4(matrix_address, 2, 1, 0);
+  set_element_matrix_4x4(matrix_address, 2, 2, 0);
+  set_element_matrix_4x4(matrix_address, 2, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 3, 0, 0);
+  set_element_matrix_4x4(matrix_address, 3, 1, 0);
+  set_element_matrix_4x4(matrix_address, 3, 2, 0);
+  set_element_matrix_4x4(matrix_address, 3, 3, 0);
+}
+
+void initialise_identity_matrix_4x4(struct matrix_4x4 *matrix_address) {
+  set_element_matrix_4x4(matrix_address, 0, 0, 1);
+  set_element_matrix_4x4(matrix_address, 0, 1, 0);
+  set_element_matrix_4x4(matrix_address, 0, 2, 0);
+  set_element_matrix_4x4(matrix_address, 0, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 1, 0, 0);
+  set_element_matrix_4x4(matrix_address, 1, 1, 1);
+  set_element_matrix_4x4(matrix_address, 1, 2, 0);
+  set_element_matrix_4x4(matrix_address, 1, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 2, 0, 0);
+  set_element_matrix_4x4(matrix_address, 2, 1, 0);
+  set_element_matrix_4x4(matrix_address, 2, 2, 1);
+  set_element_matrix_4x4(matrix_address, 2, 3, 0);
+
+  set_element_matrix_4x4(matrix_address, 3, 0, 0);
+  set_element_matrix_4x4(matrix_address, 3, 1, 0);
+  set_element_matrix_4x4(matrix_address, 3, 2, 0);
+  set_element_matrix_4x4(matrix_address, 3, 3, 1);
+}
+
+struct vector_4d multiply_matrix_4x4_v4(struct matrix_4x4 *matrix_address, struct vector_4d vector) {
+  float *data = matrix_address->data;
+  return (struct vector_4d) {
+    data[0] * vector.x +
+    data[1] * vector.y +
+    data[2] * vector.z +
+    data[3] * vector.h,
+
+    data[4] * vector.x +
+    data[5] * vector.y +
+    data[6] * vector.z +
+    data[7] * vector.h,
+
+    data[8] * vector.x +
+    data[9] * vector.y +
+    data[10] * vector.z +
+    data[11] * vector.h,
+
+    data[12] * vector.x +
+    data[13] * vector.y +
+    data[14] * vector.z +
+    data[15] * vector.h,
+  };
+}
+
+void multiply_matrix_4x4(struct matrix_4x4 *matrix_a_address, struct matrix_4x4 *matrix_b_address, struct matrix_4x4 *product_matrix_address) {
+  float *data_a = matrix_a_address->data;
+  float *data_b = matrix_b_address->data;
+  float *out_data = product_matrix_address->data;
+
+  out_data[0] = data_a[0] * data_b[0] + data_a[1] * data_b[4] + data_a[2] * data_b[8] + data_a[3] * data_b[12];
+  out_data[1] = data_a[0] * data_b[1] + data_a[1] * data_b[5] + data_a[2] * data_b[9] + data_a[3] * data_b[13];
+  out_data[2] = data_a[0] * data_b[2] + data_a[1] * data_b[6] + data_a[2] * data_b[10] + data_a[3] * data_b[14];
+  out_data[3] = data_a[0] * data_b[3] + data_a[1] * data_b[7] + data_a[2] * data_b[11] + data_a[3] * data_b[15];
+
+  out_data[4] = data_a[4] * data_b[0] + data_a[5] * data_b[4] + data_a[6] * data_b[8] + data_a[7] * data_b[12];
+  out_data[5] = data_a[4] * data_b[1] + data_a[5] * data_b[5] + data_a[6] * data_b[9] + data_a[7] * data_b[13];
+  out_data[6] = data_a[4] * data_b[2] + data_a[5] * data_b[6] + data_a[6] * data_b[10] + data_a[7] * data_b[14];
+  out_data[7] = data_a[4] * data_b[3] + data_a[5] * data_b[7] + data_a[6] * data_b[11] + data_a[7] * data_b[15];
+
+  out_data[8] = data_a[8] * data_b[0] + data_a[9] * data_b[4] + data_a[10] * data_b[8] + data_a[11] * data_b[12];
+  out_data[9] = data_a[8] * data_b[1] + data_a[9] * data_b[5] + data_a[10] * data_b[9] + data_a[11] * data_b[13];
+  out_data[10] = data_a[8] * data_b[2] + data_a[9] * data_b[6] + data_a[10] * data_b[10] + data_a[11] * data_b[14];
+  out_data[11] = data_a[8] * data_b[3] + data_a[9] * data_b[7] + data_a[10] * data_b[11] + data_a[11] * data_b[15];
+
+  out_data[12] = data_a[12] * data_b[0] + data_a[13] * data_b[4] + data_a[14] * data_b[8] + data_a[15] * data_b[12];
+  out_data[13] = data_a[12] * data_b[1] + data_a[13] * data_b[5] + data_a[14] * data_b[9] + data_a[15] * data_b[13];
+  out_data[14] = data_a[12] * data_b[2] + data_a[13] * data_b[6] + data_a[14] * data_b[10] + data_a[15] * data_b[14];
+  out_data[15] = data_a[12] * data_b[3] + data_a[13] * data_b[7] + data_a[14] * data_b[11] + data_a[15] * data_b[15];
+}
+
+
+float get_element_matrix_n_m(struct matrix_n_m *matrix_address, int row_index, int column_index) {
+  return matrix_address->data[matrix_address->columns * row_index + column_index];
+}
+
+void set_element_matrix_n_m(struct matrix_n_m *matrix_address, int row_index, int column_index, float value) {
+  matrix_address->data[matrix_address->rows * row_index + column_index] = value;
+}
+
+void initialise_null_matrix_n_m(struct matrix_n_m *matrix_address) {
+  for (int row_index = 0; row_index < matrix_address->rows; row_index++) {
+    for (int column_index = 0; column_index < matrix_address->columns; column_index++) {
+      set_element_matrix_n_m(matrix_address, row_index, column_index, 0);
+    }
+  }
+}
+
+void initialise_identity_matrix_n_m(struct matrix_n_m *matrix_address) {
+  for (int row_index = 0; row_index < matrix_address->rows; row_index++) {
+    for (int column_index = 0; column_index < matrix_address->columns; column_index++) {
+      set_element_matrix_n_m(matrix_address, row_index, column_index, 0);
+    }
+  }
+
+
+  for (int row_index = 0; row_index < matrix_address->rows; row_index++) {
+    set_element_matrix_n_m(matrix_address, row_index, row_index, 1);
+  }
+}
+
+void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m *matrix_b_address, struct matrix_n_m *product_matrix_address) {
+  initialise_null_matrix_n_m(product_matrix_address);
+}
+
+//
+// ======== TRANSLATIONS ========
+//
+
+void update_x_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+  float *data = matrix_address->data;             // equivalent to matrix {
+  sincosf(angle_radians, &data[9], &data[5]);  //                   {1      0       0       0} 
+  data[6] = -data[9];                          //                   {0      cos(a)  -sin(a) 0} 
+  data[10] = data[5];                          //                   {0      sin(a)  cos(a)  0}  
+}                                              //                   {0      0       0      1}}
+
+void update_y_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+  float *data = matrix_address->data;             // equivalent to matrix {
+  sincosf(angle_radians, &data[2], &data[0]);  //                   {cos(a)  0       sin(a)  0} 
+  data[8] = -data[2];                          //                   {0       1       0       0} 
+  data[10] = data[0];                          //                   {-sin(a) 0       cos(a)  0}  
+}                                              //                   {0       0       0      1}}
+
+void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+  float *data = matrix_address->data;             // equivalent to matrix {
+  sincosf(angle_radians, &data[4], &data[0]);  //                   {cos(a) -sin(a) 0       0} 
+  data[1] = -data[4];                          //                   {sin(a) cos(a)  0       0} 
+  data[5] = data[0];                          //                   {0      0       1       0}  
+}                                              //                   {0      0       0       1}}
+
+//
+// ======== TRIANGLE OPERATIONS ========
+//
+
+bool is_point_right_side_line(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d test_vector) {
+  float point_to_a_area = dot_product_vector_2d(
+    subtract_vector_2d(test_vector, vector_a),
+    perpendicularise_vector_2d(subtract_vector_2d(vector_b, vector_a))
+  ) / 2;
+
+  return point_to_a_area >= 0;
+}
+
+bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d vector_c, struct vector_2d test_vector) {
+    bool sign_p_to_a = is_point_right_side_line(vector_a, vector_b, test_vector);
+    bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, test_vector);
+    bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, test_vector);
+
+    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
+}
+
+//
+// ======== LOGGING ========
+//
+
+void log_vector_2d(struct vector_2d vector) {
+  printf("2D Vector: (x: %f, y: %f)\n", vector.x, vector.y);
+}
+void log_vector_3d(struct vector_3d vector) {
+  printf("3D Vector: (x: %f, y: %f, z: %f)\n", vector.x, vector.y, vector.z);
+}
+
+void log_vector_4d(struct vector_4d vector) {
+  printf("4D Vector: (x: %f, y: %f, z: %f, h: %f)\n", vector.x, vector.y, vector.z, vector.h);
+}
+
+void log_matrix_3x3(struct matrix_3x3 matrix) {
+  float *data = matrix.data;
+  printf("3 x 3 Matrix: {\n");
+  printf("    {%f %f %f}\n", data[0], data[1], data[2]);
+  printf("    {%f %f %f}\n", data[3], data[4], data[5]);
+  printf("    {%f %f %f}}\n", data[6], data[7], data[8]);
+}
+
+void log_matrix_4x4(struct matrix_4x4 matrix) {
+  float *data = matrix.data;
+  printf("4 x 4 Matrix: {\n");
+  printf("    {%f %f %f %f}\n", data[0], data[1], data[2], data[3]);
+  printf("    {%f %f %f %f}\n", data[4], data[5], data[6], data[7]);
+  printf("    {%f %f %f %f}\n", data[8], data[9], data[10], data[11]);
+  printf("    {%f %f %f %f}\n", data[12], data[13], data[14], data[15]);
+}
+
+void log_matrix_n_m(struct matrix_n_m matrix) {
+  printf("%d x %d Matrix: \n", matrix.rows, matrix.columns);
+  printf("{\n");
+  for (int row_index = 0; row_index < matrix.rows; row_index++) {
+    printf("  {");
+    for (int column_index = 0; column_index < matrix.columns; column_index++) {
+      printf("%f ", matrix.data[row_index * matrix.columns + column_index]);
+    }
+    printf("}\n");
+  }
+  printf("}\n");
+
+}
+
+void log_colour(int colour) {
+  uint8_t r = (colour >> 16) & 0xFF;
+  uint8_t g = (colour >> 8) & 0xFF;
+  uint8_t b = (colour >> 0) & 0xFF;
+  printf("Colour %d: (%u,%u,%u)\n", colour, r, g, b);
+}
+
+void log_triangle_vectors_2d(struct vector_2d *triangle_vectors, int triangle_number) {
+  for (int vector_index = 0; vector_index < triangle_number * 3; vector_index++) {
+    log_vector_2d(triangle_vectors[vector_index]);
+  }
+}
+
+void log_triangle_vectors_3d(struct vector_3d *triangle_vectors, int triangle_number) {
+  for (int vector_index = 0; vector_index < triangle_number * 3; vector_index++) {
+    log_vector_3d(triangle_vectors[vector_index]);
+  }
+}
+
+void log_triangle_colours(int *colours, int triangle_number) {
+  for (int colour_index = 0; colour_index < triangle_number * 3; triangle_number++) {
+    log_colour(colours[colour_index]);
+  }
+}
+
+//
+// ======== SCENE FILLING ========
+//
+
+int get_random_integer(int low, int high) {
+    return low + arc4random_uniform(high - low + 1);
+}
+
+float get_random_float(float low, float high) {
+  float r = (float)arc4random() / (float)UINT32_MAX;
+
+    return low + r * (high - low);
+}
+
+void fill_random_vectors_3d(struct vector_3d *triangle_vectors_address, int triangle_number,
+                            int min_x, int max_x,
+                            int min_y, int max_y,
+                            int min_z, int max_z
+                            ) {
+  for (int vector_num = 0; vector_num < triangle_number * 3; vector_num ++) {
+    triangle_vectors_address[vector_num] = (struct vector_3d){
+      get_random_float(min_x, max_x),
+      get_random_float(min_y, max_y),
+      get_random_float(min_z, max_z),
+    };
+  }
+}
+
+void fill_random_colours(int *colours_address, int triangle_number) {
+  for (int colour_num = 0; colour_num < triangle_number; colour_num++) {
+      Uint8 r = get_random_integer(0, 255); 
+      Uint8 g = get_random_integer(0, 255); 
+      Uint8 b = get_random_integer(0, 255); 
+      int rand_colour = 0 << 24 | r << 16 | g << 8 | b;
+      colours_address[colour_num] = rand_colour;
+  }
+}
+
