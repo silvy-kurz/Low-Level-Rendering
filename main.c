@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "matrix_math.h"
+#include "linear_algebra_lib.h"
 #define WIDTH 2000  
 #define HEIGHT 2000 
 
@@ -36,19 +36,22 @@ int main() {
 
     // Example pixel buffer
     Uint32 *pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
-    struct screen_vector pixels_size_vector = {WIDTH, HEIGHT};
+    struct vector_2d pixels_size_vector = {WIDTH, HEIGHT};
     float FOV_input = 60;
     float FOV = FOV_input * (M_PI / 180.0f);
     float smallest_screen_dimension = pixels_size_vector.x;
     
-    int triangle_number = 0;
-    struct world_vector* randomised_triangle_vectors = create_random_triangle_vectors(0, WIDTH - 1, 0, WIDTH - 1, 0, WIDTH - 1,
-                                                                                      triangle_number);
-    struct world_vector starting_point = {250,250,250};
-    randomised_triangle_vectors = add_cube_to_world_vectors(randomised_triangle_vectors, triangle_number, starting_point, 1000);
-    triangle_number = triangle_number + 2;
-    int* randomised_colours = create_random_triangle_colours(triangle_number);
-    log_triangle_vectors(randomised_triangle_vectors, randomised_colours, triangle_number);
+    int triangle_number = 5;
+    struct vector_3d randomised_triangle_vectors[triangle_number * 3];
+    fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
+                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
+    //struct world_vector starting_point = {250,250,250};
+    //randomised_triangle_vectors = add_cube_to_world_vectors(randomised_triangle_vectors, triangle_number, starting_point, 1000);
+    //triangle_number = triangle_number + 2;
+    Uint32 randomised_colours[triangle_number];
+    fill_random_colours(randomised_colours, triangle_number);
+    log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
+    log_triangle_colours(randomised_colours, triangle_number);
 
     while (running) {
         // Handle events
@@ -63,27 +66,27 @@ int main() {
             }
         }
         
+        fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
+                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                pixels[y * WIDTH + x] = (255 << 24) | (0 << 16) | (0 << 8) | 0;
+                pixels[y * WIDTH + x] = (Uint32) (255 << 24) | (0 << 16) | (0 << 8) | 0;
             }
         }
         
 
         // Recolour any pixels that pass rasterising check to random colour
         for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
-          struct screen_vector converted_triangle_vector_a = {
-            randomised_triangle_vectors[triangle_index * 3 + 0].x, 
-            randomised_triangle_vectors[triangle_index * 3 + 0].y};
-          
-          struct screen_vector converted_triangle_vector_b = {
-            randomised_triangle_vectors[triangle_index * 3 + 1].x, 
-            randomised_triangle_vectors[triangle_index * 3 + 1].y};
+          struct vector_2d converted_triangle_vector_a = copy_vector_3d_to_2d(
+                  randomised_triangle_vectors[triangle_index * 3 + 0]);
 
-          struct screen_vector converted_triangle_vector_c = {
-            randomised_triangle_vectors[triangle_index * 3 + 2].x, 
-            randomised_triangle_vectors[triangle_index * 3 + 2].y};
+          struct vector_2d converted_triangle_vector_b = copy_vector_3d_to_2d(
+                  randomised_triangle_vectors[triangle_index * 3 + 1]);
+
+          struct vector_2d converted_triangle_vector_c = copy_vector_3d_to_2d(
+                  randomised_triangle_vectors[triangle_index * 3 + 2]);
+          
           
           int min_x = fmin(converted_triangle_vector_a.x, fmin(converted_triangle_vector_b.x, converted_triangle_vector_c.x));
           int max_x = fmax(converted_triangle_vector_a.x, fmin(converted_triangle_vector_b.x, converted_triangle_vector_b.x));
@@ -92,14 +95,15 @@ int main() {
           
           for (int y = min_y; y < max_y; y++) {
               for (int x = min_x; x < max_x; x++) {
-                struct screen_vector pixel_vector = {x, y};
+                struct vector_2d pixel_vector = {x, y};
                 
                 if (is_point_in_triangle(
                     converted_triangle_vector_a, 
                     converted_triangle_vector_b, 
                     converted_triangle_vector_c, 
                     pixel_vector)) {
-                  pixels[y * WIDTH + x] = randomised_colours[triangle_index];
+                  
+                  pixels[y * WIDTH + x] = randomised_colours[triangle_index]; 
                 }
               }
           }
@@ -117,6 +121,7 @@ int main() {
     }
 
     free(pixels);
+
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

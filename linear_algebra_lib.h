@@ -71,7 +71,7 @@ struct vector_3d normalise_vector_3d(struct vector_3d vector);
 struct vector_3d perpendicularise_vector_3d(struct vector_3d vector);
 float dot_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b);
 
-struct vector_2d copy_vector_3d_to_2d(struct vector_2d);
+struct vector_2d copy_vector_3d_to_2d(struct vector_3d);
 struct vector_3d copy_vector_4d_to_3d(struct vector_4d);
 struct vector_4d copy_vector_3d_to_4d(struct vector_3d);
 

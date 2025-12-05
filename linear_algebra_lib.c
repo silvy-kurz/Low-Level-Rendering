@@ -87,7 +87,7 @@ float dot_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b
   return vector_a.x + vector_b.x + vector_a.y + vector_b.y + vector_a.z + vector_b.z;
 }
 
-struct vector_2d copy_vector_3d_to_2d(struct vector_2d vector) {
+struct vector_2d copy_vector_3d_to_2d(struct vector_3d vector) {
   return (struct vector_2d) {vector.x, vector.y};
 }
 
@@ -353,7 +353,7 @@ bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, 
     bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, test_vector);
     bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, test_vector);
 
-    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
+    return sign_p_to_a == sign_p_to_b && sign_p_to_b == sign_p_to_c;
 }
 
 //
@@ -422,7 +422,7 @@ void log_triangle_vectors_3d(struct vector_3d *triangle_vectors, int triangle_nu
 }
 
 void log_triangle_colours(int *colours, int triangle_number) {
-  for (int colour_index = 0; colour_index < triangle_number * 3; triangle_number++) {
+  for (int colour_index = 0; colour_index < triangle_number; colour_index++) {
     log_colour(colours[colour_index]);
   }
 }
