@@ -402,6 +402,16 @@ void log_matrix_n_m(struct matrix_n_m matrix) {
 
 }
 
+void log_camera(struct camera camera) {
+  printf("Camera: \n");
+  printf("  Position: ");
+  log_vector_3d(camera.position);
+  printf("  Orientation: (yaw: %f, pitch: %f, roll: %f)\n", camera.yaw, camera.pitch, camera.roll);
+  printf("  Planes: (near: %f, far: %f)\n", camera.near, camera.far);
+  printf("  Aspect Ratio: %f\n", camera.aspect_ratio); 
+  printf("  \n");
+}
+
 void log_colour(int colour) {
   uint8_t r = (colour >> 16) & 0xFF;
   uint8_t g = (colour >> 8) & 0xFF;

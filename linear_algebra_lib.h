@@ -44,6 +44,13 @@ struct matrix_n_m {
   float *data;
 };
 
+struct camera {
+  struct vector_3d position;
+  float yaw, pitch, roll;
+  float near, far;
+  float aspect_ratio;
+};
+
 //
 // ======== VECTOR ARITHMETIC ========
 //
@@ -131,6 +138,7 @@ void log_matrix_3x3(struct matrix_3x3 matrix);
 void log_matrix_4x4(struct matrix_4x4 matrix);
 void log_matrix_n_m(struct matrix_n_m matrix);
 
+void log_camera(struct camera camera);
 void log_colour(int colour);
 void log_triangle_vectors_2d(struct vector_2d *triangle_vectors, int triangle_number);
 void log_triangle_vectors_3d(struct vector_3d *triangle_vectors, int triangle_number);

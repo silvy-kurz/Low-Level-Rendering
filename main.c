@@ -36,6 +36,7 @@ int main() {
 
     // Example pixel buffer
     Uint32 *pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
+    struct vector_3d world_origin = {0, 0, 0};
     struct vector_2d pixels_size_vector = {WIDTH, HEIGHT};
     float FOV_input = 60;
     float FOV = FOV_input * (M_PI / 180.0f);
@@ -45,9 +46,20 @@ int main() {
     struct vector_3d randomised_triangle_vectors[triangle_number * 3];
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
                            0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
+
     struct vector_3d bottom_left_corner = {250,250,250};
     fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, WIDTH / 2);
     Uint32 randomised_colours[triangle_number];
+
+     
+    struct camera main_camera = {
+    world_origin, 
+    0, 0, 0,
+    0, 0,
+    HEIGHT / WIDTH,
+    };
+    
+    log_camera(main_camera);
     fill_random_colours(randomised_colours, triangle_number);
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
     log_triangle_colours(randomised_colours, triangle_number);
@@ -64,7 +76,10 @@ int main() {
                     running = false;
             }
         }
-        
+//        fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
+//                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
+
+//        fill_random_colours(randomised_colours, triangle_number);
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
