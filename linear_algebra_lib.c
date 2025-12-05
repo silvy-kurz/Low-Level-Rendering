@@ -465,3 +465,57 @@ void fill_random_colours(int *colours_address, int triangle_number) {
   }
 }
 
+void fill_cube_vectors_3d(struct vector_3d *triangle_vectors_address, 
+                          struct vector_3d bottom_left_corner, float cube_size) {
+  struct vector_3d cube_corners[8];
+  cube_corners[0] = (struct vector_3d) {
+    bottom_left_corner.x + 0, 
+    bottom_left_corner.y + cube_size, 
+    bottom_left_corner.z + 0};
+
+  cube_corners[1] = (struct vector_3d) {
+    bottom_left_corner.x + cube_size, 
+    bottom_left_corner.y + cube_size, 
+    bottom_left_corner.z + 0};
+
+  cube_corners[2] = (struct vector_3d) {
+    bottom_left_corner.x + cube_size, 
+    bottom_left_corner.y + 0, 
+    bottom_left_corner.z + 0};
+
+  cube_corners[3] = (struct vector_3d) {
+    bottom_left_corner.x + 0, 
+    bottom_left_corner.y + 0, 
+    bottom_left_corner.z + 0};
+
+  cube_corners[4] = (struct vector_3d) {
+    bottom_left_corner.x + 0, 
+    bottom_left_corner.y + 0, 
+    bottom_left_corner.z + cube_size};
+
+  cube_corners[5] = (struct vector_3d) {
+    bottom_left_corner.x + cube_size, 
+    bottom_left_corner.y + 0, 
+    bottom_left_corner.z + cube_size};
+
+  cube_corners[6] = (struct vector_3d) {
+    bottom_left_corner.x + cube_size, 
+    bottom_left_corner.y + cube_size, 
+    bottom_left_corner.z + cube_size};
+
+  cube_corners[7] = (struct vector_3d) {
+    bottom_left_corner.x + 0, 
+    bottom_left_corner.y + cube_size, 
+    bottom_left_corner.z + cube_size};
+
+  // first triangle
+  triangle_vectors_address[0] = cube_corners[0];
+  triangle_vectors_address[1] = cube_corners[1];
+  triangle_vectors_address[2] = cube_corners[2];
+
+  // second triangle
+  triangle_vectors_address[3] = cube_corners[0];
+  triangle_vectors_address[4] = cube_corners[2];
+  triangle_vectors_address[5] = cube_corners[3];
+}
+

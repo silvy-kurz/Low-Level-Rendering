@@ -149,4 +149,6 @@ void fill_random_vectors_3d(struct vector_3d *triangle_vectors_address, int tria
                             ); 
 void fill_random_colours(int *colours_address, int triangle_number);
 
+void fill_cube_vectors_3d(struct vector_3d *triangle_vectors_address, 
+                          struct vector_3d bottom_left_corner, float cube_size);
 #endif

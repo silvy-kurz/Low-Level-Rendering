@@ -41,13 +41,12 @@ int main() {
     float FOV = FOV_input * (M_PI / 180.0f);
     float smallest_screen_dimension = pixels_size_vector.x;
     
-    int triangle_number = 5;
+    int triangle_number = 2;
     struct vector_3d randomised_triangle_vectors[triangle_number * 3];
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
                            0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
-    //struct world_vector starting_point = {250,250,250};
-    //randomised_triangle_vectors = add_cube_to_world_vectors(randomised_triangle_vectors, triangle_number, starting_point, 1000);
-    //triangle_number = triangle_number + 2;
+    struct vector_3d bottom_left_corner = {250,250,250};
+    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, WIDTH / 2);
     Uint32 randomised_colours[triangle_number];
     fill_random_colours(randomised_colours, triangle_number);
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
@@ -66,8 +65,6 @@ int main() {
             }
         }
         
-        fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
-                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
