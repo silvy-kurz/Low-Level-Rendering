@@ -346,6 +346,28 @@ void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_
   data[11] = translation_position.z;
 }
 
+void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar) {
+  float *data = matrix_address->data;
+  data[0] = scalar;
+  data[5] = scalar;
+  data[10] = scalar;
+  data[15] = scalar;
+}
+
+void update_projection_matrix(struct matrix_4x4 *matrix_address, struct camera camera) {
+  float fov_scalar = (1 / tanf(camera.field_of_view / 2));
+  float planes_far_scalar = camera.far / (camera.far - camera.near);
+  float planes_near_translation = -planes_far_scalar * camera.near;
+
+  float *data = matrix_address->data;
+  data[0] = camera.aspect_ratio * fov_scalar;
+  data[5] = fov_scalar;
+  data[10] = planes_far_scalar;
+  data[11] = planes_near_translation;
+  data[14] = 1;
+  data[15] = 0;
+}
+
 //
 // ======== TRIANGLE OPERATIONS ========
 //
@@ -419,6 +441,7 @@ void log_camera(struct camera camera) {
   log_vector_3d(camera.position);
   printf("  Orientation: (yaw: %f, pitch: %f, roll: %f)\n", camera.yaw, camera.pitch, camera.roll);
   printf("  Planes: (near: %f, far: %f)\n", camera.near, camera.far);
+  printf("  Field of View: %f\n", camera.field_of_view); 
   printf("  Aspect Ratio: %f\n", camera.aspect_ratio); 
   printf("  \n");
 }

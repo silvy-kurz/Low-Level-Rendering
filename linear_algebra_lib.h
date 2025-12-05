@@ -48,6 +48,7 @@ struct camera {
   struct vector_3d position;
   float yaw, pitch, roll;
   float near, far;
+  float field_of_view;
   float aspect_ratio;
 };
 
@@ -121,7 +122,8 @@ void update_y_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
 void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians);
 
 void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position);
-
+void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar);
+void update_projection_matrix(struct matrix_4x4 *matrix_address, struct camera camera);
 //
 // ======== TRIANGLE OPERATIONS ========
 //

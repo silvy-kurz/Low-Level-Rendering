@@ -55,12 +55,12 @@ int main() {
     struct camera main_camera = {
     world_origin, 
     0, 0, 0,
-    0, 0,
-    HEIGHT / WIDTH,
+    0, 10,
+    60,
+    HEIGHT / WIDTH
     };
     // main_camera.yaw = M_PI / 12; 
-    main_camera.yaw = 0;
-    main_camera.position = (struct vector_3d) {-700, -1000, -500};
+    // main_camera.position = (struct vector_3d) {-700, -1000, -500};
     
     log_camera(main_camera);
     fill_random_colours(randomised_colours, triangle_number);
@@ -69,15 +69,22 @@ int main() {
     
     struct matrix_4x4 rotation_matrix;
     struct matrix_4x4 translation_matrix;
+    struct matrix_4x4 orientation_matrix;
+    struct matrix_4x4 projection_matrix;
     struct matrix_4x4 all_transformations_matrix;
 
     initialise_identity_matrix_4x4(&rotation_matrix);
     initialise_identity_matrix_4x4(&translation_matrix);
-    log_matrix_4x4(rotation_matrix);
+    initialise_identity_matrix_4x4(&orientation_matrix);
+    initialise_identity_matrix_4x4(&projection_matrix);
     
     update_z_rotation_matrix(&rotation_matrix, main_camera.yaw);
     update_translation_matrix(&translation_matrix, main_camera.position);
-    multiply_matrix_4x4(&rotation_matrix, &translation_matrix, &all_transformations_matrix);
+    update_projection_matrix(&projection_matrix, main_camera);
+
+    multiply_matrix_4x4(&rotation_matrix, &translation_matrix, &orientation_matrix);
+    multiply_matrix_4x4(&orientation_matrix, &projection_matrix, &all_transformations_matrix);
+    log_matrix_4x4(all_transformations_matrix);
     // update_y_rotation_matrix(&rotation_matrix, main_camera.pitch);
     // update_x_rotation_matrix(&rotation_matrix, main_camera.roll);
     log_matrix_4x4(all_transformations_matrix);
