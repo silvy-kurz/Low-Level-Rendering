@@ -52,7 +52,7 @@ struct vector_2d add_vector_2d(struct vector_2d vector_a, struct vector_2d vecto
 struct vector_2d subtract_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b);
 struct vector_2d multiply_vector_2d_scalar(struct vector_2d vector, float scalar);
 struct vector_2d divide_vector_2d_scalar(struct vector_2d vector, float scalar);
-struct vector_2d cross_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b);
+float cross_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b);
 
 float length_vector_2d(struct vector_2d vector);
 struct vector_2d normalise_vector_2d(struct vector_2d vector);
@@ -64,7 +64,7 @@ struct vector_3d add_vector_3d(struct vector_3d vector_a, struct vector_3d vecto
 struct vector_3d subtract_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b);
 struct vector_3d multiply_vector_3d_scalar(struct vector_3d vector_a, float scalar);
 struct vector_3d divide_vector_3d_scalar(struct vector_3d vector_a, float scalar);
-struct vector_3d cross_product_vector_3d(struct vector_2d vector_a, struct vector_2d vector_b);
+struct vector_3d cross_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b);
 
 float length_vector_3d(struct vector_3d vector);
 struct vector_3d normalise_vector_3d(struct vector_3d vector);

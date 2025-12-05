@@ -27,8 +27,8 @@ struct vector_2d divide_vector_2d_scalar(struct vector_2d vector, float scalar) 
   return (struct vector_2d) {vector.x / scalar, vector.y / scalar};
 }
 
-struct vector_2d cross_product_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
-  return (struct vector_2d) {0,0}; // TODO: Add in cross product implementation
+float cross_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+  return vector_a.x * vector_b.y - vector_b.x * vector_a.y; 
 }
 
 float length_vector_2d(struct vector_2d vector) {
@@ -65,7 +65,8 @@ struct vector_3d divide_vector_3d_scalar(struct vector_3d vector, float scalar) 
   return (struct vector_3d) {vector.x / scalar, vector.y / scalar, vector.z / scalar};
 }
 
-struct vector_3d cross_product_3d(struct vector_2d vector_a, struct vector_2d vector_b) {
+struct vector_3d cross_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+  printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
   return (struct vector_3d) {0,0,0}; //TODO: Add in cross product implementation 
 }
 
@@ -79,6 +80,7 @@ struct vector_3d normalise_vector_3d(struct vector_3d vector) {
 }
 
 struct vector_3d perpendicularise_vector_3d(struct vector_3d vector) {
+  printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
   return (struct vector_3d) {0,0,0}; //TODO: Add in 3d vector perpendicular implementation
 }
 float dot_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
@@ -338,12 +340,12 @@ void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
 //
 
 bool is_point_right_side_line(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d test_vector) {
-  float point_to_a_area = dot_product_vector_2d(
-    subtract_vector_2d(test_vector, vector_a),
-    perpendicularise_vector_2d(subtract_vector_2d(vector_b, vector_a))
-  ) / 2;
+  float cross_product = cross_product_vector_2d(
+    subtract_vector_2d(vector_b, vector_a),
+    subtract_vector_2d(test_vector, vector_a)
+  );
 
-  return point_to_a_area >= 0;
+  return cross_product >= 0;
 }
 
 bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d vector_c, struct vector_2d test_vector) {
