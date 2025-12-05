@@ -120,6 +120,8 @@ void update_x_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
 void update_y_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians);
 void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians);
 
+void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position);
+
 //
 // ======== TRIANGLE OPERATIONS ========
 //

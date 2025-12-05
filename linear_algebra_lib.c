@@ -339,6 +339,13 @@ void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
   data[5] = data[0];                          //                   {0      0       1       0}  
 }                                              //                   {0      0       0       1}}
 
+void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position) {
+  float *data = matrix_address->data;
+  data[3] = translation_position.x;
+  data[7] = translation_position.y;
+  data[11] = translation_position.z;
+}
+
 //
 // ======== TRIANGLE OPERATIONS ========
 //
@@ -357,7 +364,7 @@ bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, 
     bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, test_vector);
     bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, test_vector);
 
-    return sign_p_to_a == sign_p_to_b && sign_p_to_b == sign_p_to_c;
+    return sign_p_to_a && sign_p_to_b && sign_p_to_c;
 }
 
 //
@@ -523,13 +530,13 @@ void fill_cube_vectors_3d(struct vector_3d *triangle_vectors_address,
     bottom_left_corner.z + cube_size};
 
   // first triangle
-  triangle_vectors_address[0] = cube_corners[0];
-  triangle_vectors_address[1] = cube_corners[1];
+  triangle_vectors_address[1] = cube_corners[0];
+  triangle_vectors_address[0] = cube_corners[1];
   triangle_vectors_address[2] = cube_corners[2];
 
   // second triangle
-  triangle_vectors_address[3] = cube_corners[0];
-  triangle_vectors_address[4] = cube_corners[2];
+  triangle_vectors_address[4] = cube_corners[0];
+  triangle_vectors_address[3] = cube_corners[2];
   triangle_vectors_address[5] = cube_corners[3];
 }
 
