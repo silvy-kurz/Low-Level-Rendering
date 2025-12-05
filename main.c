@@ -45,10 +45,10 @@ int main() {
     int triangle_number = 2;
     struct vector_3d randomised_triangle_vectors[triangle_number * 3];
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
-                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
+                           0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
 
-    struct vector_3d bottom_left_corner = {250,250,250};
-    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, WIDTH / 2);
+    struct vector_3d bottom_left_corner = {700,1000,500};
+    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, WIDTH / 4);
     Uint32 randomised_colours[triangle_number];
 
      
@@ -58,12 +58,41 @@ int main() {
     0, 0,
     HEIGHT / WIDTH,
     };
+    main_camera.yaw = M_PI / 12; 
+    // main_camera.pitch = 0;
     
     log_camera(main_camera);
     fill_random_colours(randomised_colours, triangle_number);
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
     log_triangle_colours(randomised_colours, triangle_number);
+    
+    struct matrix_4x4 rotation_matrix;
 
+    initialise_identity_matrix_4x4(&rotation_matrix);
+    log_matrix_4x4(rotation_matrix);
+    
+    update_z_rotation_matrix(&rotation_matrix, main_camera.yaw);
+    // update_y_rotation_matrix(&rotation_matrix, main_camera.pitch);
+    // update_x_rotation_matrix(&rotation_matrix, main_camera.roll);
+    log_matrix_4x4(rotation_matrix);
+    for (int i = 0; i < triangle_number * 3; i++) {
+      struct vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(randomised_triangle_vectors[i]);
+
+      // log_vector_4d(homogenous_coordinate);
+      struct vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(&rotation_matrix, homogenous_coordinate);
+      
+      // log_vector_4d(transformed_4d_vector);
+      struct vector_3d new_vector = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
+      
+
+
+      randomised_triangle_vectors[i] = new_vector;
+
+    }
+    printf("new vectors\n"); 
+    log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
+    
+    // running = false; 
     while (running) {
         // Handle events
         while (SDL_PollEvent(&event)) {

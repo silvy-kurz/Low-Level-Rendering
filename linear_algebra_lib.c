@@ -98,6 +98,10 @@ struct vector_4d convert_vector_3d_homogenous_coordinate(struct vector_3d vector
   return (struct vector_4d) {vector.x, vector.y, vector.z, 1};
 }
 
+struct vector_3d convert_homogenous_coordinate_vector_3d(struct vector_4d vector) {
+  return (struct vector_3d) {vector.x / vector.h, vector.y / vector.h, vector.z / vector.h};
+}
+
 //
 // ======== MATRIX ARITHMETIC ========
 //
@@ -307,7 +311,7 @@ void initialise_identity_matrix_n_m(struct matrix_n_m *matrix_address) {
 }
 
 void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m *matrix_b_address, struct matrix_n_m *product_matrix_address) {
-  initialise_null_matrix_n_m(product_matrix_address);
+  initialise_null_matrix_n_m(product_matrix_address); //TODO: Implement general matrix multiplication
 }
 
 //
@@ -385,7 +389,7 @@ void log_matrix_4x4(struct matrix_4x4 matrix) {
   printf("    {%f %f %f %f}\n", data[0], data[1], data[2], data[3]);
   printf("    {%f %f %f %f}\n", data[4], data[5], data[6], data[7]);
   printf("    {%f %f %f %f}\n", data[8], data[9], data[10], data[11]);
-  printf("    {%f %f %f %f}\n", data[12], data[13], data[14], data[15]);
+  printf("    {%f %f %f %f}}\n", data[12], data[13], data[14], data[15]);
 }
 
 void log_matrix_n_m(struct matrix_n_m matrix) {
