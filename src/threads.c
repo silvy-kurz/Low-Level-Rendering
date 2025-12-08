@@ -56,7 +56,7 @@ void *render_chunk(void *arg) {
   return 0;
 }
 
-int main(int argc, char *argv[]) {
+int example_threaded_render_main(int argc, char *argv[]) {
   int POSITION_X;
   int POSITION_Y;
   int WIDTH = 1000;

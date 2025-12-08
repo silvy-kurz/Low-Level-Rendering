@@ -1,4 +1,4 @@
-#include "linear_algebra_lib.h"
+#include "vectors_and_matrices.h"
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>

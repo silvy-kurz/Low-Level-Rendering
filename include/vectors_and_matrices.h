@@ -1,5 +1,5 @@
-#ifndef LINEAR_ALGEBRA_LIB_H 
-#define LINEAR_ALGEBRA_LIB_H 
+#ifndef  VECTORS_AND_MATRICES_H
+#define VECTORS_AND_MATRICES_H 
 
 #include <SDL2/SDL.h>
 #include <math.h>
