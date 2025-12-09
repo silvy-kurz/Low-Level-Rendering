@@ -384,6 +384,40 @@ void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_
   data[15] = 0;
 }
 
+void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states) {
+  for (int matrix_index = 0; matrix_index < buffer_size; matrix_index++) {
+    switch (matrix_initial_states[matrix_index]) {
+      case 0:
+        initialise_null_matrix_4x4(&matrices_buffer[matrix_index]);
+        break;
+      case 1:
+        initialise_identity_matrix_4x4(&matrices_buffer[matrix_index]);
+        break;
+    }
+  }
+}
+
+void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) { //TODO: make code more readable, perhaps with enums encoding indices of matrices
+  multiply_matrix_4x4(&matrices_buffer[0], &matrices_buffer[1], &matrices_buffer[2]);
+  multiply_matrix_4x4(&matrices_buffer[2], &matrices_buffer[3], &matrices_buffer[4]);
+  multiply_matrix_4x4(&matrices_buffer[4], &matrices_buffer[5], &matrices_buffer[6]);
+  multiply_matrix_4x4(&matrices_buffer[6], &matrices_buffer[7], &matrices_buffer[8]);
+}
+
+struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_vectors, int triangle_number, struct matrix_4x4 *mapping_matrix_address) {
+  for (int i = 0; i < triangle_number * 3; i++) {
+    struct vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(world_space_vectors[i]);
+
+    // log_vector_4d(homogenous_coordinate);
+    struct vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(mapping_matrix_address, homogenous_coordinate);
+      
+    // log_vector_4d(transformed_4d_vector);
+    struct vector_3d new_vector = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
+      
+    world_space_vectors[i] = new_vector;
+  }
+}
+
 //
 // ======== TRIANGLE OPERATIONS ========
 //

@@ -138,6 +138,12 @@ void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
 void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position);
 void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar);
 void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_state frustum_data);
+void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer);
+
+void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states);
+
+struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_vectors, int triangle_number, struct matrix_4x4 *mapping_matrix_address);
+
 //
 // ======== TRIANGLE OPERATIONS ========
 //

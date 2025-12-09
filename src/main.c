@@ -69,44 +69,34 @@ int main() {
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
     log_triangle_colours(randomised_colours, triangle_number);
     
-    struct matrix_4x4 rotation_matrix;
-    struct matrix_4x4 translation_matrix;
-    struct matrix_4x4 orientation_matrix;
-    struct matrix_4x4 projection_matrix;
-    struct matrix_4x4 all_transformations_matrix;
+    int transformation_matrices_amount = 9;
+    struct matrix_4x4 transformation_matrix_buffer[transformation_matrices_amount];
+    // layout of matrix buffer:
+    // 0: x rotation matrix
+    // 1: y rotation matrix
+    // 2: x * y rotation matrix
+    // 3: z rotation matrix 
+    // 4: x * y * z  orientation matrix 
+    // 5: position translation matrix 
+    // 6: camera view matrix 
+    // 7: projection matrix  
+    // 8: final mapping matrix 
+    int matrix_initial_states[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    initialise_identity_matrix_4x4(&rotation_matrix);
-    initialise_identity_matrix_4x4(&translation_matrix);
-    initialise_identity_matrix_4x4(&orientation_matrix);
-    initialise_identity_matrix_4x4(&projection_matrix);
+    initialise_matrix_buffer(transformation_matrix_buffer, transformation_matrices_amount, matrix_initial_states);
+
+
+    update_z_rotation_matrix(&transformation_matrix_buffer[4], main_camera.yaw);
+    update_translation_matrix(&transformation_matrix_buffer[5], main_camera.position);
+    update_projection_matrix(&transformation_matrix_buffer[7], camera_frustum_data);
     
-    update_z_rotation_matrix(&rotation_matrix, main_camera.yaw);
-    update_translation_matrix(&translation_matrix, main_camera.position);
-    update_projection_matrix(&projection_matrix, camera_frustum_data);
+    calculate_mapping_matrix(transformation_matrix_buffer);
+    log_matrix_4x4(transformation_matrix_buffer[8]);
+    map_world_space_vectors_to_NDCs(randomised_triangle_vectors, triangle_number, &transformation_matrix_buffer[8]);
 
-    multiply_matrix_4x4(&rotation_matrix, &translation_matrix, &orientation_matrix);
-    multiply_matrix_4x4(&orientation_matrix, &projection_matrix, &all_transformations_matrix);
-    log_matrix_4x4(all_transformations_matrix);
-    // update_y_rotation_matrix(&rotation_matrix, main_camera.pitch);
-    // update_x_rotation_matrix(&rotation_matrix, main_camera.roll);
-    log_matrix_4x4(all_transformations_matrix);
-    for (int i = 0; i < triangle_number * 3; i++) {
-      struct vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(randomised_triangle_vectors[i]);
-
-      // log_vector_4d(homogenous_coordinate);
-      struct vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(&all_transformations_matrix, homogenous_coordinate);
-      
-      // log_vector_4d(transformed_4d_vector);
-      struct vector_3d new_vector = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
-      
-
-
-      randomised_triangle_vectors[i] = new_vector;
-
-    }
     printf("new vectors\n"); 
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
-    
+
     // running = false; 
     while (running) {
         // Handle events
@@ -120,10 +110,7 @@ int main() {
                     running = false;
             }
         }
-//        fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
-//                           0, WIDTH - 1, 0, WIDTH - 1,0, WIDTH - 1);
 
-//        fill_random_colours(randomised_colours, triangle_number);
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
