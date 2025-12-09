@@ -52,6 +52,13 @@ struct camera {
   float aspect_ratio;
 };
 
+struct frustum_state {
+  float x_scalar;
+  float y_scalar;
+  float z_scalar;
+  float z_constant;
+};
+
 //
 // ======== VECTOR ARITHMETIC ========
 //
@@ -83,6 +90,7 @@ struct vector_2d copy_vector_3d_to_2d(struct vector_3d);
 struct vector_3d copy_vector_4d_to_3d(struct vector_4d);
 struct vector_4d convert_vector_3d_homogenous_coordinate(struct vector_3d vector);
 struct vector_3d convert_homogenous_coordinate_vector_3d(struct vector_4d vector);
+struct vector_2d map_norm_device_coordinate_to_screen(struct vector_3d norm_device_coordinate, int screen_width, int screen_height);
 
 //
 // ======== MATRIX ARITHMETIC ========
@@ -114,6 +122,12 @@ void initialise_identity_matrix_n_m(struct matrix_n_m *matrix_address);
 void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m *matrix_b_address, struct matrix_n_m *product_matrix_address);
 
 //
+// ======== CAMERAS ========
+//
+
+struct frustum_state calculate_frustum_values(struct camera camera);
+
+//
 // ======== TRANSLATIONS ========
 //
 
@@ -123,7 +137,7 @@ void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_rad
 
 void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position);
 void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar);
-void update_projection_matrix(struct matrix_4x4 *matrix_address, struct camera camera);
+void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_state frustum_data);
 //
 // ======== TRIANGLE OPERATIONS ========
 //

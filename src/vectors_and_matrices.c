@@ -99,7 +99,11 @@ struct vector_4d convert_vector_3d_homogenous_coordinate(struct vector_3d vector
 }
 
 struct vector_3d convert_homogenous_coordinate_vector_3d(struct vector_4d vector) {
-  return (struct vector_3d) {vector.x / vector.h, vector.y / vector.h, vector.z / vector.h};
+  return (struct vector_3d) {vector.x / vector.h + 0.5, vector.y / vector.h + 0.5, vector.z / vector.h + 0.5};
+}
+
+struct vector_2d map_norm_device_coordinate_to_screen(struct vector_3d norm_device_coordinate, int screen_width, int screen_height) {
+  return (struct vector_2d) {norm_device_coordinate.x * screen_width, (1 - norm_device_coordinate.y) * screen_height};
 }
 
 //
@@ -315,6 +319,21 @@ void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m 
 }
 
 //
+// ======== CAMERAS ========
+//
+
+struct frustum_state calculate_frustum_values(struct camera camera) {
+  float near = camera.near;
+  float far = camera.far;
+  return (struct frustum_state) {
+    camera.aspect_ratio * 1 / (2 * tanf(camera.field_of_view / 2)),
+    1 / (2 * tanf(camera.field_of_view / 2)),
+    (far + near) / (2 * (near - far)),
+    (near * far) / (near - far)
+  };
+}
+
+//
 // ======== TRANSLATIONS ========
 //
 
@@ -354,17 +373,14 @@ void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar) {
   data[15] = scalar;
 }
 
-void update_projection_matrix(struct matrix_4x4 *matrix_address, struct camera camera) {
-  float fov_scalar = (1 / tanf(camera.field_of_view / 2));
-  float planes_far_scalar = camera.far / (camera.far - camera.near);
-  float planes_near_translation = -planes_far_scalar * camera.near;
-
+void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_state frustum_data) {
   float *data = matrix_address->data;
-  data[0] = camera.aspect_ratio * fov_scalar;
-  data[5] = fov_scalar;
-  data[10] = planes_far_scalar;
-  data[11] = planes_near_translation;
-  data[14] = 1;
+
+  data[0] = frustum_data.x_scalar;
+  data[5] = frustum_data.y_scalar;
+  data[10] = frustum_data.z_scalar;
+  data[11] = frustum_data.z_constant;
+  data[14] = -1;
   data[15] = 0;
 }
 
@@ -553,13 +569,13 @@ void fill_cube_vectors_3d(struct vector_3d *triangle_vectors_address,
     bottom_left_corner.z + cube_size};
 
   // first triangle
-  triangle_vectors_address[1] = cube_corners[0];
-  triangle_vectors_address[0] = cube_corners[1];
+  triangle_vectors_address[0] = cube_corners[0];
+  triangle_vectors_address[1] = cube_corners[1];
   triangle_vectors_address[2] = cube_corners[2];
 
   // second triangle
-  triangle_vectors_address[4] = cube_corners[0];
-  triangle_vectors_address[3] = cube_corners[2];
+  triangle_vectors_address[3] = cube_corners[0];
+  triangle_vectors_address[4] = cube_corners[2];
   triangle_vectors_address[5] = cube_corners[3];
 }
 

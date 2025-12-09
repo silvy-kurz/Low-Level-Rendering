@@ -47,18 +47,20 @@ int main() {
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
                            0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
 
-    struct vector_3d bottom_left_corner = {700,1000,500};
-    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, WIDTH / 4);
+    struct vector_3d bottom_left_corner = {-7,-7,-30};
+    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, 14);
     Uint32 randomised_colours[triangle_number];
 
      
     struct camera main_camera = {
     world_origin, 
     0, 0, 0,
-    0, 10,
-    60,
+    20, 40,
+    FOV_input * (M_PI / 180.0f),
     HEIGHT / WIDTH
     };
+      
+    struct frustum_state camera_frustum_data = calculate_frustum_values(main_camera);
     // main_camera.yaw = M_PI / 12; 
     // main_camera.position = (struct vector_3d) {-700, -1000, -500};
     
@@ -80,7 +82,7 @@ int main() {
     
     update_z_rotation_matrix(&rotation_matrix, main_camera.yaw);
     update_translation_matrix(&translation_matrix, main_camera.position);
-    update_projection_matrix(&projection_matrix, main_camera);
+    update_projection_matrix(&projection_matrix, camera_frustum_data);
 
     multiply_matrix_4x4(&rotation_matrix, &translation_matrix, &orientation_matrix);
     multiply_matrix_4x4(&orientation_matrix, &projection_matrix, &all_transformations_matrix);
@@ -132,14 +134,14 @@ int main() {
 
         // Recolour any pixels that pass rasterising check to random colour
         for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
-          struct vector_2d converted_triangle_vector_a = copy_vector_3d_to_2d(
-                  randomised_triangle_vectors[triangle_index * 3 + 0]);
+          struct vector_2d converted_triangle_vector_a = map_norm_device_coordinate_to_screen(
+                  randomised_triangle_vectors[triangle_index * 3 + 0], WIDTH, HEIGHT);
 
-          struct vector_2d converted_triangle_vector_b = copy_vector_3d_to_2d(
-                  randomised_triangle_vectors[triangle_index * 3 + 1]);
+          struct vector_2d converted_triangle_vector_b = map_norm_device_coordinate_to_screen(
+                  randomised_triangle_vectors[triangle_index * 3 + 1], WIDTH, HEIGHT);
 
-          struct vector_2d converted_triangle_vector_c = copy_vector_3d_to_2d(
-                  randomised_triangle_vectors[triangle_index * 3 + 2]);
+          struct vector_2d converted_triangle_vector_c = map_norm_device_coordinate_to_screen(
+                  randomised_triangle_vectors[triangle_index * 3 + 2], WIDTH, HEIGHT);
           
           
           int min_x = fmin(converted_triangle_vector_a.x, fmin(converted_triangle_vector_b.x, converted_triangle_vector_c.x));
