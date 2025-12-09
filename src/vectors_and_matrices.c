@@ -404,7 +404,10 @@ void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) { //TODO: make
   multiply_matrix_4x4(&matrices_buffer[6], &matrices_buffer[7], &matrices_buffer[8]);
 }
 
-struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_vectors, int triangle_number, struct matrix_4x4 *mapping_matrix_address) {
+void map_world_space_vectors_to_screen_coordinates(
+  struct vector_3d *world_space_vectors, struct vector_2d *screen_coordinates, 
+  struct matrix_4x4 *mapping_matrix_address, int triangle_number,
+  int screen_width, int screen_height) {
   for (int i = 0; i < triangle_number * 3; i++) {
     struct vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(world_space_vectors[i]);
 
@@ -412,9 +415,13 @@ struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_v
     struct vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(mapping_matrix_address, homogenous_coordinate);
       
     // log_vector_4d(transformed_4d_vector);
-    struct vector_3d new_vector = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
-      
-    world_space_vectors[i] = new_vector;
+    struct vector_3d normalised_device_coordinate = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
+    
+
+    struct vector_2d screen_coordinate = map_norm_device_coordinate_to_screen(normalised_device_coordinate, screen_width, screen_height);
+
+    screen_coordinates[i] = screen_coordinate;
+
   }
 }
 
@@ -437,6 +444,35 @@ bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, 
     bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, test_vector);
 
     return sign_p_to_a && sign_p_to_b && sign_p_to_c;
+}
+
+void rasterise_screen_coordinates(struct vector_2d *screen_coordinates,
+                                  int triangle_number, Uint32 *triangle_colours, 
+                                  Uint32 *pixel_buffer, int screen_width) {
+  for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
+    struct vector_2d triangle_vector_a = screen_coordinates[triangle_index * 3 + 0];
+    struct vector_2d triangle_vector_b = screen_coordinates[triangle_index * 3 + 1];
+    struct vector_2d triangle_vector_c = screen_coordinates[triangle_index * 3 + 2];
+    
+    int min_x = fmin(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_c.x));
+    int max_x = fmax(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_b.x));
+    int min_y = fmin(triangle_vector_a.y, fmin(triangle_vector_b.y, triangle_vector_c.y));
+    int max_y = fmax(triangle_vector_a.y, fmax(triangle_vector_b.y, triangle_vector_c.y));
+          
+    for (int y = min_y; y < max_y; y++) {
+        for (int x = min_x; x < max_x; x++) {
+          struct vector_2d current_pixel = {x, y};
+                
+          if (is_point_in_triangle(
+              triangle_vector_a, 
+              triangle_vector_b, 
+              triangle_vector_c, 
+              current_pixel)) {
+            pixel_buffer[y * screen_width + x] = triangle_colours[triangle_index]; 
+          }
+        }
+      }
+  }
 }
 
 //

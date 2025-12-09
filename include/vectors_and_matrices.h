@@ -142,7 +142,10 @@ void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer);
 
 void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states);
 
-struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_vectors, int triangle_number, struct matrix_4x4 *mapping_matrix_address);
+void map_world_space_vectors_to_screen_coordinates(
+  struct vector_3d *world_space_vectors, struct vector_2d *screen_coordinates, 
+  struct matrix_4x4 *mapping_matrix_address, int triangle_number,
+  int screen_width, int screen_height);
 
 //
 // ======== TRIANGLE OPERATIONS ========
@@ -150,6 +153,7 @@ struct vector_3d map_world_space_vectors_to_NDCs(struct vector_3d *world_space_v
 
 bool is_point_right_side_line(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d test_vector);
 bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d vector_c, struct vector_2d test_vector);
+void rasterise_screen_coordinates(struct vector_2d *screen_coordinates, int triangle_number, Uint32 *triangle_colours, Uint32 *pixel_buffer, int screen_width);
 
 //
 // ======== LOGGING ========

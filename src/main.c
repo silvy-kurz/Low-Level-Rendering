@@ -44,6 +44,7 @@ int main() {
     
     int triangle_number = 2;
     struct vector_3d randomised_triangle_vectors[triangle_number * 3];
+    struct vector_2d screen_vectors[triangle_number * 3];
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
                            0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
 
@@ -92,10 +93,13 @@ int main() {
     
     calculate_mapping_matrix(transformation_matrix_buffer);
     log_matrix_4x4(transformation_matrix_buffer[8]);
-    map_world_space_vectors_to_NDCs(randomised_triangle_vectors, triangle_number, &transformation_matrix_buffer[8]);
+    map_world_space_vectors_to_screen_coordinates(
+    randomised_triangle_vectors, screen_vectors, 
+    &transformation_matrix_buffer[8], triangle_number,
+    WIDTH, HEIGHT);
 
     printf("new vectors\n"); 
-    log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
+    log_triangle_vectors_2d(screen_vectors, triangle_number);
 
     // running = false; 
     while (running) {
@@ -120,40 +124,8 @@ int main() {
         
 
         // Recolour any pixels that pass rasterising check to random colour
-        for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
-          struct vector_2d converted_triangle_vector_a = map_norm_device_coordinate_to_screen(
-                  randomised_triangle_vectors[triangle_index * 3 + 0], WIDTH, HEIGHT);
+        rasterise_screen_coordinates(screen_vectors, triangle_number, randomised_colours, pixels, WIDTH);
 
-          struct vector_2d converted_triangle_vector_b = map_norm_device_coordinate_to_screen(
-                  randomised_triangle_vectors[triangle_index * 3 + 1], WIDTH, HEIGHT);
-
-          struct vector_2d converted_triangle_vector_c = map_norm_device_coordinate_to_screen(
-                  randomised_triangle_vectors[triangle_index * 3 + 2], WIDTH, HEIGHT);
-          
-          
-          int min_x = fmin(converted_triangle_vector_a.x, fmin(converted_triangle_vector_b.x, converted_triangle_vector_c.x));
-          int max_x = fmax(converted_triangle_vector_a.x, fmin(converted_triangle_vector_b.x, converted_triangle_vector_b.x));
-          int min_y = fmin(converted_triangle_vector_a.y, fmin(converted_triangle_vector_b.y, converted_triangle_vector_c.y));
-          int max_y = fmax(converted_triangle_vector_a.y, fmax(converted_triangle_vector_b.y, converted_triangle_vector_c.y));
-          
-          for (int y = min_y; y < max_y; y++) {
-              for (int x = min_x; x < max_x; x++) {
-                struct vector_2d pixel_vector = {x, y};
-                
-                if (is_point_in_triangle(
-                    converted_triangle_vector_a, 
-                    converted_triangle_vector_b, 
-                    converted_triangle_vector_c, 
-                    pixel_vector)) {
-                  
-                  pixels[y * WIDTH + x] = randomised_colours[triangle_index]; 
-                }
-              }
-          }
-
-
-            
-        }
         // Update texture with new pixels
         SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(Uint32));
 
