@@ -72,35 +72,30 @@ int main() {
     
     int transformation_matrices_amount = 9;
     struct matrix_4x4 transformation_matrix_buffer[transformation_matrices_amount];
-    // layout of matrix buffer:
-    // 0: x rotation matrix
-    // 1: y rotation matrix
-    // 2: x * y rotation matrix
-    // 3: z rotation matrix 
-    // 4: x * y * z  orientation matrix 
-    // 5: position translation matrix 
-    // 6: camera view matrix 
-    // 7: projection matrix  
-    // 8: final mapping matrix 
+
     int matrix_initial_states[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     initialise_matrix_buffer(transformation_matrix_buffer, transformation_matrices_amount, matrix_initial_states);
 
 
-    update_z_rotation_matrix(&transformation_matrix_buffer[4], main_camera.yaw);
-    update_translation_matrix(&transformation_matrix_buffer[5], main_camera.position);
-    update_projection_matrix(&transformation_matrix_buffer[7], camera_frustum_data);
+    update_z_rotation_matrix(&transformation_matrix_buffer[Z_ROTATION_MATRIX], main_camera.yaw);
+    printf("%d \n", Z_ROTATION_MATRIX);
+    update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+    update_projection_matrix(&transformation_matrix_buffer[PROJECTION_MATRIX], camera_frustum_data);
     
     calculate_mapping_matrix(transformation_matrix_buffer);
     log_matrix_4x4(transformation_matrix_buffer[8]);
     map_world_space_vectors_to_screen_coordinates(
     randomised_triangle_vectors, screen_vectors, 
-    &transformation_matrix_buffer[8], triangle_number,
+    &transformation_matrix_buffer[FINAL_MAPPING_MATRIX], triangle_number,
     WIDTH, HEIGHT);
 
     printf("new vectors\n"); 
     log_triangle_vectors_2d(screen_vectors, triangle_number);
 
+    const float MOVE_SPEED  = 0.1f;
+    const float ANGLE_SPEED = 5.0f * (M_PI / 180.0f);  // degrees per frame (or rad, your choice
+  
     // running = false; 
     while (running) {
         // Handle events
@@ -114,6 +109,72 @@ int main() {
                     running = false;
             }
         }
+
+
+        // --- Get keyboard state for smooth movement ---
+        const Uint8* keys = SDL_GetKeyboardState(NULL);
+         
+
+        // Movement: W A S D
+        if (keys[SDL_SCANCODE_W]) {
+          main_camera.position.z -= MOVE_SPEED;
+          update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+
+        if (keys[SDL_SCANCODE_S]) {
+           main_camera.position.z += MOVE_SPEED;
+           update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+
+        if (keys[SDL_SCANCODE_A]) {
+          main_camera.position.x -= MOVE_SPEED;
+          update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+
+        if (keys[SDL_SCANCODE_D]) {
+          main_camera.position.x += MOVE_SPEED;
+          update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+
+        // moving up and down 
+        if (keys[SDL_SCANCODE_E]) {
+          main_camera.position.y -= MOVE_SPEED;
+          update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+
+        if (keys[SDL_SCANCODE_R]) {
+          main_camera.position.y += MOVE_SPEED;
+          update_translation_matrix(&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX], main_camera.position);
+        }
+        
+        // Angles: H J K
+        // You can decide the meaning (e.g., yaw / pitch / roll)
+        if (keys[SDL_SCANCODE_H]) {
+          main_camera.yaw = fmodf((main_camera.yaw - ANGLE_SPEED), (-2.0f * (float)M_PI));
+          update_x_rotation_matrix(&transformation_matrix_buffer[Z_ROTATION_MATRIX], main_camera.yaw);
+        }
+
+        if (keys[SDL_SCANCODE_J]) {
+          main_camera.pitch = fmodf((main_camera.pitch - ANGLE_SPEED), (-2.0f * (float)M_PI));
+          update_y_rotation_matrix(&transformation_matrix_buffer[Y_ROTATION_MATRIX], main_camera.pitch);
+        }
+
+        if (keys[SDL_SCANCODE_K]) {
+          main_camera.roll = fmodf((main_camera.roll + ANGLE_SPEED), (+2.0f * (float)M_PI));
+          update_z_rotation_matrix(&transformation_matrix_buffer[X_ROTATION_MATRIX], main_camera.roll);
+        }
+
+        calculate_mapping_matrix(transformation_matrix_buffer);
+
+        map_world_space_vectors_to_screen_coordinates(
+          randomised_triangle_vectors, screen_vectors, 
+          &transformation_matrix_buffer[FINAL_MAPPING_MATRIX], triangle_number,
+        WIDTH, HEIGHT);
+
+        // For debugging
+        printf("pos: (%f, %f, %f) | yaw: %f pitch: %f roll: %f\n",
+            main_camera.position.x, main_camera.position.y, main_camera.position.z, 
+            main_camera.yaw , main_camera.pitch, main_camera.roll);
 
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {

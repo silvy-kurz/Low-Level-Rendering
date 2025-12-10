@@ -59,6 +59,18 @@ struct frustum_state {
   float z_constant;
 };
 
+enum matrix_buffer_indexes {
+  X_ROTATION_MATRIX,
+  Y_ROTATION_MATRIX,
+  X_Y_ROTATION_MATRIX,
+  Z_ROTATION_MATRIX,
+  X_Y_Z_ROTATION_MATRIX,
+  POSITION_TRANSLATION_MATRIX,
+  CAMERA_VIEW_MATRIX,
+  PROJECTION_MATRIX,
+  FINAL_MAPPING_MATRIX 
+};
+
 //
 // ======== VECTOR ARITHMETIC ========
 //
@@ -176,6 +188,7 @@ void log_triangle_colours(int *colours, int triangle_number);
 //
 // ======== SCENE FILLING ========
 //
+
 int get_random_integer(int low, int high);
 float get_random_float(float low, float high);
 

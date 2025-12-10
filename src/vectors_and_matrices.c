@@ -390,6 +390,7 @@ void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_siz
       case 0:
         initialise_null_matrix_4x4(&matrices_buffer[matrix_index]);
         break;
+
       case 1:
         initialise_identity_matrix_4x4(&matrices_buffer[matrix_index]);
         break;
@@ -397,11 +398,11 @@ void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_siz
   }
 }
 
-void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) { //TODO: make code more readable, perhaps with enums encoding indices of matrices
-  multiply_matrix_4x4(&matrices_buffer[0], &matrices_buffer[1], &matrices_buffer[2]);
-  multiply_matrix_4x4(&matrices_buffer[2], &matrices_buffer[3], &matrices_buffer[4]);
-  multiply_matrix_4x4(&matrices_buffer[4], &matrices_buffer[5], &matrices_buffer[6]);
-  multiply_matrix_4x4(&matrices_buffer[6], &matrices_buffer[7], &matrices_buffer[8]);
+void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) { 
+  multiply_matrix_4x4(&matrices_buffer[X_ROTATION_MATRIX], &matrices_buffer[Y_ROTATION_MATRIX], &matrices_buffer[X_Y_ROTATION_MATRIX]);
+  multiply_matrix_4x4(&matrices_buffer[X_Y_ROTATION_MATRIX], &matrices_buffer[Z_ROTATION_MATRIX], &matrices_buffer[X_Y_Z_ROTATION_MATRIX]);
+  multiply_matrix_4x4(&matrices_buffer[X_Y_Z_ROTATION_MATRIX], &matrices_buffer[POSITION_TRANSLATION_MATRIX], &matrices_buffer[CAMERA_VIEW_MATRIX]);
+  multiply_matrix_4x4(&matrices_buffer[PROJECTION_MATRIX], &matrices_buffer[CAMERA_VIEW_MATRIX], &matrices_buffer[FINAL_MAPPING_MATRIX]);
 }
 
 void map_world_space_vectors_to_screen_coordinates(
