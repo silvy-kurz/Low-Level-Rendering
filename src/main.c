@@ -149,18 +149,35 @@ int main() {
         
         // Angles: H J K
         // You can decide the meaning (e.g., yaw / pitch / roll)
-        if (keys[SDL_SCANCODE_H]) {
+        if (keys[SDL_SCANCODE_H] && !keys[SDL_SCANCODE_LSHIFT]) {
           main_camera.yaw = fmodf((main_camera.yaw - ANGLE_SPEED), (-2.0f * (float)M_PI));
           update_x_rotation_matrix(&transformation_matrix_buffer[Z_ROTATION_MATRIX], main_camera.yaw);
         }
 
-        if (keys[SDL_SCANCODE_J]) {
+        if (keys[SDL_SCANCODE_H] && keys[SDL_SCANCODE_LSHIFT]) {
+          main_camera.yaw = fmodf((main_camera.yaw + ANGLE_SPEED), (2.0f * (float)M_PI));
+          update_x_rotation_matrix(&transformation_matrix_buffer[Z_ROTATION_MATRIX], main_camera.yaw);
+        }
+
+
+        if (keys[SDL_SCANCODE_J] && !keys[SDL_SCANCODE_LSHIFT]) {
           main_camera.pitch = fmodf((main_camera.pitch - ANGLE_SPEED), (-2.0f * (float)M_PI));
           update_y_rotation_matrix(&transformation_matrix_buffer[Y_ROTATION_MATRIX], main_camera.pitch);
         }
 
-        if (keys[SDL_SCANCODE_K]) {
-          main_camera.roll = fmodf((main_camera.roll + ANGLE_SPEED), (+2.0f * (float)M_PI));
+        if (keys[SDL_SCANCODE_J] && keys[SDL_SCANCODE_LSHIFT]) {
+          main_camera.pitch = fmodf((main_camera.pitch + ANGLE_SPEED), (2.0f * (float)M_PI));
+          update_y_rotation_matrix(&transformation_matrix_buffer[Y_ROTATION_MATRIX], main_camera.pitch);
+        }
+
+
+        if (keys[SDL_SCANCODE_K] && !keys[SDL_SCANCODE_LSHIFT]) {
+          main_camera.roll = fmodf((main_camera.roll - ANGLE_SPEED), (-2.0f * (float)M_PI));
+          update_z_rotation_matrix(&transformation_matrix_buffer[X_ROTATION_MATRIX], main_camera.roll);
+        }
+
+        if (keys[SDL_SCANCODE_K] && keys[SDL_SCANCODE_LSHIFT]) {
+          main_camera.roll = fmodf((main_camera.roll + ANGLE_SPEED), (2.0f * (float)M_PI));
           update_z_rotation_matrix(&transformation_matrix_buffer[X_ROTATION_MATRIX], main_camera.roll);
         }
 
