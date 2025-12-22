@@ -11,113 +11,113 @@
 // ======== VECTOR ARITHMETIC ========
 //
 
-struct vector_2d add_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
-  return (struct vector_2d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y};
+vector_2d add_vector_2d(vector_2d vector_a, vector_2d vector_b) {
+  return (vector_2d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y};
 }
 
-struct vector_2d subtract_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
-  return (struct vector_2d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y};
+vector_2d subtract_vector_2d(vector_2d vector_a, vector_2d vector_b) {
+  return (vector_2d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y};
 }
 
-struct vector_2d multiply_vector_2d_scalar(struct vector_2d vector, float scalar) {
-  return (struct vector_2d) {vector.x * scalar, vector.y * scalar};
+vector_2d multiply_vector_2d_scalar(vector_2d vector, float scalar) {
+  return (vector_2d) {vector.x * scalar, vector.y * scalar};
 }
 
-struct vector_2d divide_vector_2d_scalar(struct vector_2d vector, float scalar) {
-  return (struct vector_2d) {vector.x / scalar, vector.y / scalar};
+vector_2d divide_vector_2d_scalar(vector_2d vector, float scalar) {
+  return (vector_2d) {vector.x / scalar, vector.y / scalar};
 }
 
-float cross_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+float cross_product_vector_2d(vector_2d vector_a, vector_2d vector_b) {
   return vector_a.x * vector_b.y - vector_b.x * vector_a.y; 
 }
 
-float length_vector_2d(struct vector_2d vector) {
+float length_vector_2d(vector_2d vector) {
   return sqrtf(vector.x * vector.x + vector.y * vector.y);
 }
 
-struct vector_2d normalise_vector_2d(struct vector_2d vector) {
+vector_2d normalise_vector_2d(vector_2d vector) {
   float vector_length = length_vector_2d(vector);
-  return (struct vector_2d) {vector.x / vector_length, vector.y / vector_length};
+  return (vector_2d) {vector.x / vector_length, vector.y / vector_length};
 }
 
-struct vector_2d perpendicularise_vector_2d(struct vector_2d vector) {
-  return (struct vector_2d) {vector.y, -vector.x};
+vector_2d perpendicularise_vector_2d(vector_2d vector) {
+  return (vector_2d) {vector.y, -vector.x};
 }
 
-float dot_product_vector_2d(struct vector_2d vector_a, struct vector_2d vector_b) {
+float dot_product_vector_2d(vector_2d vector_a, vector_2d vector_b) {
   return vector_a.x * vector_b.x + vector_a.y * vector_b.y;
 }
 
 
-struct vector_3d add_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
-  return (struct vector_3d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y, vector_a.z + vector_b.z};
+vector_3d add_vector_3d(vector_3d vector_a, vector_3d vector_b) {
+  return (vector_3d) {vector_a.x + vector_b.x, vector_a.y + vector_b.y, vector_a.z + vector_b.z};
 }
 
-struct vector_3d subtract_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
-  return (struct vector_3d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y, vector_a.z - vector_b.z};
+vector_3d subtract_vector_3d(vector_3d vector_a, vector_3d vector_b) {
+  return (vector_3d) {vector_a.x - vector_b.x, vector_a.y - vector_b.y, vector_a.z - vector_b.z};
 }
 
-struct vector_3d multiply_vector_3d_scalar(struct vector_3d vector, float scalar) {
-  return (struct vector_3d) {vector.x * scalar, vector.y * scalar, vector.z * scalar};
+vector_3d multiply_vector_3d_scalar(vector_3d vector, float scalar) {
+  return (vector_3d) {vector.x * scalar, vector.y * scalar, vector.z * scalar};
 }
 
-struct vector_3d divide_vector_3d_scalar(struct vector_3d vector, float scalar) {
-  return (struct vector_3d) {vector.x / scalar, vector.y / scalar, vector.z / scalar};
+vector_3d divide_vector_3d_scalar(vector_3d vector, float scalar) {
+  return (vector_3d) {vector.x / scalar, vector.y / scalar, vector.z / scalar};
 }
 
-struct vector_3d cross_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+vector_3d cross_product_vector_3d(vector_3d vector_a, vector_3d vector_b) {
   printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
-  return (struct vector_3d) {0,0,0}; //TODO: Add in cross product implementation 
+  return (vector_3d) {0,0,0}; //TODO: Add in cross product implementation 
 }
 
-float length_vector_3d(struct vector_3d vector) {
+float length_vector_3d(vector_3d vector) {
   return sqrtf(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
-struct vector_3d normalise_vector_3d(struct vector_3d vector) {
+vector_3d normalise_vector_3d(vector_3d vector) {
   float vector_length = length_vector_3d(vector);
-  return (struct vector_3d) {vector.x / vector_length, vector.y / vector_length, vector.z / vector_length};
+  return (vector_3d) {vector.x / vector_length, vector.y / vector_length, vector.z / vector_length};
 }
 
-struct vector_3d perpendicularise_vector_3d(struct vector_3d vector) {
+vector_3d perpendicularise_vector_3d(vector_3d vector) {
   printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
-  return (struct vector_3d) {0,0,0}; //TODO: Add in 3d vector perpendicular implementation
+  return (vector_3d) {0,0,0}; //TODO: Add in 3d vector perpendicular implementation
 }
-float dot_product_vector_3d(struct vector_3d vector_a, struct vector_3d vector_b) {
+float dot_product_vector_3d(vector_3d vector_a, vector_3d vector_b) {
   return vector_a.x + vector_b.x + vector_a.y + vector_b.y + vector_a.z + vector_b.z;
 }
 
-struct vector_2d copy_vector_3d_to_2d(struct vector_3d vector) {
-  return (struct vector_2d) {vector.x, vector.y};
+vector_2d copy_vector_3d_to_2d(vector_3d vector) {
+  return (vector_2d) {vector.x, vector.y};
 }
 
-struct vector_3d copy_vector_4d_to_3d(struct vector_4d vector) {
-  return (struct vector_3d) {vector.x, vector.y, vector.z};
+vector_3d copy_vector_4d_to_3d(vector_4d vector) {
+  return (vector_3d) {vector.x, vector.y, vector.z};
 }
-struct vector_4d convert_vector_3d_homogenous_coordinate(struct vector_3d vector) {
-  return (struct vector_4d) {vector.x, vector.y, vector.z, 1};
-}
-
-struct vector_3d convert_homogenous_coordinate_vector_3d(struct vector_4d vector) {
-  return (struct vector_3d) {vector.x / vector.h + 0.5, vector.y / vector.h + 0.5, vector.z / vector.h + 0.5};
+vector_4d convert_vector_3d_homogenous_coordinate(vector_3d vector) {
+  return (vector_4d) {vector.x, vector.y, vector.z, 1};
 }
 
-struct vector_2d map_norm_device_coordinate_to_screen(struct vector_3d norm_device_coordinate, int screen_width, int screen_height) {
-  return (struct vector_2d) {norm_device_coordinate.x * screen_width, (1 - norm_device_coordinate.y) * screen_height};
+vector_3d convert_homogenous_coordinate_vector_3d(vector_4d vector) {
+  return (vector_3d) {vector.x / vector.h + 0.5, vector.y / vector.h + 0.5, vector.z / vector.h + 0.5};
+}
+
+vector_2d map_norm_device_coordinate_to_screen(vector_3d norm_device_coordinate, int screen_width, int screen_height) {
+  return (vector_2d) {norm_device_coordinate.x * screen_width, (1 - norm_device_coordinate.y) * screen_height};
 }
 
 //
 // ======== MATRIX ARITHMETIC ========
 //
 
-float get_element_matrix_3x3(struct matrix_3x3 *matrix_address, int row_index, int column_index) {
+float get_element_matrix_3x3(matrix_3x3 *matrix_address, int row_index, int column_index) {
   return matrix_address->data[3 * row_index + column_index];
 }
-void set_element_matrix_3x3(struct matrix_3x3 *matrix_address, int row_index, int column_index, float value) {
+void set_element_matrix_3x3(matrix_3x3 *matrix_address, int row_index, int column_index, float value) {
   matrix_address->data[3 * row_index + column_index] = value;
 }
 
-void initialise_null_matrix_3x3(struct matrix_3x3 *matrix_address) {
+void initialise_null_matrix_3x3(matrix_3x3 *matrix_address) {
   set_element_matrix_3x3(matrix_address, 0, 0, 0);
   set_element_matrix_3x3(matrix_address, 0, 1, 0);
   set_element_matrix_3x3(matrix_address, 0, 2, 0);
@@ -131,7 +131,7 @@ void initialise_null_matrix_3x3(struct matrix_3x3 *matrix_address) {
   set_element_matrix_3x3(matrix_address, 2, 2, 0);
 }
 
-void initialise_identity_matrix_3x3(struct matrix_3x3 *matrix_address) {
+void initialise_identity_matrix_3x3(matrix_3x3 *matrix_address) {
   set_element_matrix_3x3(matrix_address, 0,0,1);
   set_element_matrix_3x3(matrix_address, 0,1,0);
   set_element_matrix_3x3(matrix_address, 0,2,0);
@@ -145,9 +145,9 @@ void initialise_identity_matrix_3x3(struct matrix_3x3 *matrix_address) {
   set_element_matrix_3x3(matrix_address, 2,2,1);
 }
 
-struct vector_3d multiply_matrix_3x3_v3(struct matrix_3x3 *matrix_address, struct vector_3d vector) {
+vector_3d multiply_matrix_3x3_v3(matrix_3x3 *matrix_address, vector_3d vector) {
   float *data = matrix_address->data;
-  return (struct vector_3d) {
+  return (vector_3d) {
     data[0] * vector.x +
     data[1] * vector.y +
     data[2] * vector.z,
@@ -162,7 +162,7 @@ struct vector_3d multiply_matrix_3x3_v3(struct matrix_3x3 *matrix_address, struc
   };
 }
 
-void multiply_matrix_3x3(struct matrix_3x3 *matrix_a_address, struct matrix_3x3 *matrix_b_address, struct matrix_3x3 *product_matrix_address) {
+void multiply_matrix_3x3(matrix_3x3 *matrix_a_address, matrix_3x3 *matrix_b_address, matrix_3x3 *product_matrix_address) {
   float *data_a = matrix_a_address->data;
   float *data_b = matrix_b_address->data;
   float *out_data = product_matrix_address->data;
@@ -181,15 +181,15 @@ void multiply_matrix_3x3(struct matrix_3x3 *matrix_a_address, struct matrix_3x3 
 }
 
 
-float get_element_matrix_4x4(struct matrix_4x4 *matrix_address, int row_index, int column_index) { 
+float get_element_matrix_4x4(matrix_4x4 *matrix_address, int row_index, int column_index) { 
   return matrix_address->data[4 * row_index + column_index];
 }
 
-void set_element_matrix_4x4(struct matrix_4x4 *matrix_address, int row_index, int column_index, float value) {
+void set_element_matrix_4x4(matrix_4x4 *matrix_address, int row_index, int column_index, float value) {
   matrix_address->data[4 * row_index + column_index] = value;
 }
 
-void initialise_null_matrix_4x4(struct matrix_4x4 *matrix_address) {
+void initialise_null_matrix_4x4(matrix_4x4 *matrix_address) {
   set_element_matrix_4x4(matrix_address, 0, 0, 0);
   set_element_matrix_4x4(matrix_address, 0, 1, 0);
   set_element_matrix_4x4(matrix_address, 0, 2, 0);
@@ -211,7 +211,7 @@ void initialise_null_matrix_4x4(struct matrix_4x4 *matrix_address) {
   set_element_matrix_4x4(matrix_address, 3, 3, 0);
 }
 
-void initialise_identity_matrix_4x4(struct matrix_4x4 *matrix_address) {
+void initialise_identity_matrix_4x4(matrix_4x4 *matrix_address) {
   set_element_matrix_4x4(matrix_address, 0, 0, 1);
   set_element_matrix_4x4(matrix_address, 0, 1, 0);
   set_element_matrix_4x4(matrix_address, 0, 2, 0);
@@ -233,9 +233,9 @@ void initialise_identity_matrix_4x4(struct matrix_4x4 *matrix_address) {
   set_element_matrix_4x4(matrix_address, 3, 3, 1);
 }
 
-struct vector_4d multiply_matrix_4x4_v4(struct matrix_4x4 *matrix_address, struct vector_4d vector) {
+vector_4d multiply_matrix_4x4_v4(matrix_4x4 *matrix_address, vector_4d vector) {
   float *data = matrix_address->data;
-  return (struct vector_4d) {
+  return (vector_4d) {
     data[0] * vector.x +
     data[1] * vector.y +
     data[2] * vector.z +
@@ -258,7 +258,7 @@ struct vector_4d multiply_matrix_4x4_v4(struct matrix_4x4 *matrix_address, struc
   };
 }
 
-void multiply_matrix_4x4(struct matrix_4x4 *matrix_a_address, struct matrix_4x4 *matrix_b_address, struct matrix_4x4 *product_matrix_address) {
+void multiply_matrix_4x4(matrix_4x4 *matrix_a_address, matrix_4x4 *matrix_b_address, matrix_4x4 *product_matrix_address) {
   float *data_a = matrix_a_address->data;
   float *data_b = matrix_b_address->data;
   float *out_data = product_matrix_address->data;
@@ -285,15 +285,15 @@ void multiply_matrix_4x4(struct matrix_4x4 *matrix_a_address, struct matrix_4x4 
 }
 
 
-float get_element_matrix_n_m(struct matrix_n_m *matrix_address, int row_index, int column_index) {
+float get_element_matrix_n_m(matrix_n_m *matrix_address, int row_index, int column_index) {
   return matrix_address->data[matrix_address->columns * row_index + column_index];
 }
 
-void set_element_matrix_n_m(struct matrix_n_m *matrix_address, int row_index, int column_index, float value) {
+void set_element_matrix_n_m(matrix_n_m *matrix_address, int row_index, int column_index, float value) {
   matrix_address->data[matrix_address->rows * row_index + column_index] = value;
 }
 
-void initialise_null_matrix_n_m(struct matrix_n_m *matrix_address) {
+void initialise_null_matrix_n_m(matrix_n_m *matrix_address) {
   for (int row_index = 0; row_index < matrix_address->rows; row_index++) {
     for (int column_index = 0; column_index < matrix_address->columns; column_index++) {
       set_element_matrix_n_m(matrix_address, row_index, column_index, 0);
@@ -301,7 +301,7 @@ void initialise_null_matrix_n_m(struct matrix_n_m *matrix_address) {
   }
 }
 
-void initialise_identity_matrix_n_m(struct matrix_n_m *matrix_address) {
+void initialise_identity_matrix_n_m(matrix_n_m *matrix_address) {
   for (int row_index = 0; row_index < matrix_address->rows; row_index++) {
     for (int column_index = 0; column_index < matrix_address->columns; column_index++) {
       set_element_matrix_n_m(matrix_address, row_index, column_index, 0);
@@ -314,7 +314,7 @@ void initialise_identity_matrix_n_m(struct matrix_n_m *matrix_address) {
   }
 }
 
-void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m *matrix_b_address, struct matrix_n_m *product_matrix_address) {
+void multiply_matrix_n_m(matrix_n_m *matrix_a_address, matrix_n_m *matrix_b_address, matrix_n_m *product_matrix_address) {
   initialise_null_matrix_n_m(product_matrix_address); //TODO: Implement general matrix multiplication
 }
 
@@ -322,10 +322,10 @@ void multiply_matrix_n_m(struct matrix_n_m *matrix_a_address, struct matrix_n_m 
 // ======== CAMERAS ========
 //
 
-struct frustum_state calculate_frustum_values(struct camera camera) {
+frustum_state calculate_frustum_values(camera camera) {
   float near = camera.near;
   float far = camera.far;
-  return (struct frustum_state) {
+  return (frustum_state) {
     camera.aspect_ratio * 1 / (2 * tanf(camera.field_of_view / 2)),
     1 / (2 * tanf(camera.field_of_view / 2)),
     (far + near) / (2 * (near - far)),
@@ -337,35 +337,35 @@ struct frustum_state calculate_frustum_values(struct camera camera) {
 // ======== TRANSLATIONS ========
 //
 
-void update_x_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+void update_x_rotation_matrix(matrix_4x4 *matrix_address, float angle_radians) {
   float *data = matrix_address->data;             // equivalent to matrix {
   sincosf(angle_radians, &data[9], &data[5]);  //                   {1      0       0       0} 
   data[6] = -data[9];                          //                   {0      cos(a)  -sin(a) 0} 
   data[10] = data[5];                          //                   {0      sin(a)  cos(a)  0}  
 }                                              //                   {0      0       0      1}}
 
-void update_y_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+void update_y_rotation_matrix(matrix_4x4 *matrix_address, float angle_radians) {
   float *data = matrix_address->data;             // equivalent to matrix {
   sincosf(angle_radians, &data[2], &data[0]);  //                   {cos(a)  0       sin(a)  0} 
   data[8] = -data[2];                          //                   {0       1       0       0} 
   data[10] = data[0];                          //                   {-sin(a) 0       cos(a)  0}  
 }                                              //                   {0       0       0      1}}
 
-void update_z_rotation_matrix(struct matrix_4x4 *matrix_address, float angle_radians) {
+void update_z_rotation_matrix(matrix_4x4 *matrix_address, float angle_radians) {
   float *data = matrix_address->data;             // equivalent to matrix {
   sincosf(angle_radians, &data[4], &data[0]);  //                   {cos(a) -sin(a) 0       0} 
   data[1] = -data[4];                          //                   {sin(a) cos(a)  0       0} 
   data[5] = data[0];                          //                   {0      0       1       0}  
 }                                              //                   {0      0       0       1}}
 
-void update_translation_matrix(struct matrix_4x4 *matrix_address, struct vector_3d translation_position) {
+void update_translation_matrix(matrix_4x4 *matrix_address, vector_3d translation_position) {
   float *data = matrix_address->data;
   data[3] = translation_position.x;
   data[7] = translation_position.y;
   data[11] = translation_position.z;
 }
 
-void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar) {
+void update_scaling_matrix(matrix_4x4 *matrix_address, float scalar) {
   float *data = matrix_address->data;
   data[0] = scalar;
   data[5] = scalar;
@@ -373,7 +373,7 @@ void update_scaling_matrix(struct matrix_4x4 *matrix_address, float scalar) {
   data[15] = scalar;
 }
 
-void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_state frustum_data) {
+void update_projection_matrix(matrix_4x4 *matrix_address, frustum_state frustum_data) {
   float *data = matrix_address->data;
 
   data[0] = frustum_data.x_scalar;
@@ -384,7 +384,7 @@ void update_projection_matrix(struct matrix_4x4 *matrix_address, struct frustum_
   data[15] = 0;
 }
 
-void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states) {
+void initialise_matrix_buffer(matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states) {
   for (int matrix_index = 0; matrix_index < buffer_size; matrix_index++) {
     switch (matrix_initial_states[matrix_index]) {
       case 0:
@@ -398,7 +398,7 @@ void initialise_matrix_buffer(struct matrix_4x4 *matrices_buffer, int buffer_siz
   }
 }
 
-void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) { 
+void calculate_mapping_matrix(matrix_4x4 *matrices_buffer) { 
   multiply_matrix_4x4(&matrices_buffer[X_ROTATION_MATRIX], &matrices_buffer[Y_ROTATION_MATRIX], &matrices_buffer[X_Y_ROTATION_MATRIX]);
   multiply_matrix_4x4(&matrices_buffer[X_Y_ROTATION_MATRIX], &matrices_buffer[Z_ROTATION_MATRIX], &matrices_buffer[X_Y_Z_ROTATION_MATRIX]);
   multiply_matrix_4x4(&matrices_buffer[X_Y_Z_ROTATION_MATRIX], &matrices_buffer[POSITION_TRANSLATION_MATRIX], &matrices_buffer[CAMERA_VIEW_MATRIX]);
@@ -406,20 +406,20 @@ void calculate_mapping_matrix(struct matrix_4x4 *matrices_buffer) {
 }
 
 void map_world_space_vectors_to_screen_coordinates(
-  struct vector_3d *world_space_vectors, struct vector_2d *screen_coordinates, 
-  struct matrix_4x4 *mapping_matrix_address, int triangle_number,
+  vector_3d *world_space_vectors, vector_2d *screen_coordinates, 
+  matrix_4x4 *mapping_matrix_address, int triangle_number,
   int screen_width, int screen_height) {
   for (int i = 0; i < triangle_number * 3; i++) {
-    struct vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(world_space_vectors[i]);
+    vector_4d homogenous_coordinate = convert_vector_3d_homogenous_coordinate(world_space_vectors[i]);
 
     // log_vector_4d(homogenous_coordinate);
-    struct vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(mapping_matrix_address, homogenous_coordinate);
+    vector_4d transformed_4d_vector = multiply_matrix_4x4_v4(mapping_matrix_address, homogenous_coordinate);
       
     // log_vector_4d(transformed_4d_vector);
-    struct vector_3d normalised_device_coordinate = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
+    vector_3d normalised_device_coordinate = convert_homogenous_coordinate_vector_3d(transformed_4d_vector);
     
 
-    struct vector_2d screen_coordinate = map_norm_device_coordinate_to_screen(normalised_device_coordinate, screen_width, screen_height);
+    vector_2d screen_coordinate = map_norm_device_coordinate_to_screen(normalised_device_coordinate, screen_width, screen_height);
 
     screen_coordinates[i] = screen_coordinate;
 
@@ -430,7 +430,7 @@ void map_world_space_vectors_to_screen_coordinates(
 // ======== TRIANGLE OPERATIONS ========
 //
 
-bool is_point_right_side_line(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d test_vector) {
+bool is_point_right_side_line(vector_2d vector_a, vector_2d vector_b, vector_2d test_vector) {
   float cross_product = cross_product_vector_2d(
     subtract_vector_2d(vector_b, vector_a),
     subtract_vector_2d(test_vector, vector_a)
@@ -439,7 +439,7 @@ bool is_point_right_side_line(struct vector_2d vector_a, struct vector_2d vector
   return cross_product >= 0;
 }
 
-bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, struct vector_2d vector_c, struct vector_2d test_vector) {
+bool is_point_in_triangle(vector_2d vector_a, vector_2d vector_b, vector_2d vector_c, vector_2d test_vector) {
     bool sign_p_to_a = is_point_right_side_line(vector_a, vector_b, test_vector);
     bool sign_p_to_b = is_point_right_side_line(vector_b, vector_c, test_vector);
     bool sign_p_to_c = is_point_right_side_line(vector_c, vector_a, test_vector);
@@ -447,13 +447,13 @@ bool is_point_in_triangle(struct vector_2d vector_a, struct vector_2d vector_b, 
     return sign_p_to_a && sign_p_to_b && sign_p_to_c;
 }
 
-void rasterise_screen_coordinates(struct vector_2d *screen_coordinates,
+void rasterise_screen_coordinates(vector_2d *screen_coordinates,
                                   int triangle_number, Uint32 *triangle_colours, 
                                   Uint32 *pixel_buffer, int screen_width) {
   for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
-    struct vector_2d triangle_vector_a = screen_coordinates[triangle_index * 3 + 0];
-    struct vector_2d triangle_vector_b = screen_coordinates[triangle_index * 3 + 1];
-    struct vector_2d triangle_vector_c = screen_coordinates[triangle_index * 3 + 2];
+    vector_2d triangle_vector_a = screen_coordinates[triangle_index * 3 + 0];
+    vector_2d triangle_vector_b = screen_coordinates[triangle_index * 3 + 1];
+    vector_2d triangle_vector_c = screen_coordinates[triangle_index * 3 + 2];
     
     int min_x = fmin(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_c.x));
     int max_x = fmax(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_b.x));
@@ -462,7 +462,7 @@ void rasterise_screen_coordinates(struct vector_2d *screen_coordinates,
           
     for (int y = min_y; y < max_y; y++) {
         for (int x = min_x; x < max_x; x++) {
-          struct vector_2d current_pixel = {x, y};
+          vector_2d current_pixel = {x, y};
                 
           if (is_point_in_triangle(
               triangle_vector_a, 
@@ -480,18 +480,18 @@ void rasterise_screen_coordinates(struct vector_2d *screen_coordinates,
 // ======== LOGGING ========
 //
 
-void log_vector_2d(struct vector_2d vector) {
+void log_vector_2d(vector_2d vector) {
   printf("2D Vector: (x: %f, y: %f)\n", vector.x, vector.y);
 }
-void log_vector_3d(struct vector_3d vector) {
+void log_vector_3d(vector_3d vector) {
   printf("3D Vector: (x: %f, y: %f, z: %f)\n", vector.x, vector.y, vector.z);
 }
 
-void log_vector_4d(struct vector_4d vector) {
+void log_vector_4d(vector_4d vector) {
   printf("4D Vector: (x: %f, y: %f, z: %f, h: %f)\n", vector.x, vector.y, vector.z, vector.h);
 }
 
-void log_matrix_3x3(struct matrix_3x3 matrix) {
+void log_matrix_3x3(matrix_3x3 matrix) {
   float *data = matrix.data;
   printf("3 x 3 Matrix: {\n");
   printf("    {%f %f %f}\n", data[0], data[1], data[2]);
@@ -499,7 +499,7 @@ void log_matrix_3x3(struct matrix_3x3 matrix) {
   printf("    {%f %f %f}}\n", data[6], data[7], data[8]);
 }
 
-void log_matrix_4x4(struct matrix_4x4 matrix) {
+void log_matrix_4x4(matrix_4x4 matrix) {
   float *data = matrix.data;
   printf("4 x 4 Matrix: {\n");
   printf("    {%f %f %f %f}\n", data[0], data[1], data[2], data[3]);
@@ -508,7 +508,7 @@ void log_matrix_4x4(struct matrix_4x4 matrix) {
   printf("    {%f %f %f %f}}\n", data[12], data[13], data[14], data[15]);
 }
 
-void log_matrix_n_m(struct matrix_n_m matrix) {
+void log_matrix_n_m(matrix_n_m matrix) {
   printf("%d x %d Matrix: \n", matrix.rows, matrix.columns);
   printf("{\n");
   for (int row_index = 0; row_index < matrix.rows; row_index++) {
@@ -522,7 +522,7 @@ void log_matrix_n_m(struct matrix_n_m matrix) {
 
 }
 
-void log_camera(struct camera camera) {
+void log_camera(camera camera) {
   printf("Camera: \n");
   printf("  Position: ");
   log_vector_3d(camera.position);
@@ -540,13 +540,13 @@ void log_colour(int colour) {
   printf("Colour %d: (%u,%u,%u)\n", colour, r, g, b);
 }
 
-void log_triangle_vectors_2d(struct vector_2d *triangle_vectors, int triangle_number) {
+void log_triangle_vectors_2d(vector_2d *triangle_vectors, int triangle_number) {
   for (int vector_index = 0; vector_index < triangle_number * 3; vector_index++) {
     log_vector_2d(triangle_vectors[vector_index]);
   }
 }
 
-void log_triangle_vectors_3d(struct vector_3d *triangle_vectors, int triangle_number) {
+void log_triangle_vectors_3d(vector_3d *triangle_vectors, int triangle_number) {
   for (int vector_index = 0; vector_index < triangle_number * 3; vector_index++) {
     log_vector_3d(triangle_vectors[vector_index]);
   }
@@ -572,13 +572,13 @@ float get_random_float(float low, float high) {
     return low + r * (high - low);
 }
 
-void fill_random_vectors_3d(struct vector_3d *triangle_vectors_address, int triangle_number,
+void fill_random_vectors_3d(vector_3d *triangle_vectors_address, int triangle_number,
                             int min_x, int max_x,
                             int min_y, int max_y,
                             int min_z, int max_z
                             ) {
   for (int vector_num = 0; vector_num < triangle_number * 3; vector_num ++) {
-    triangle_vectors_address[vector_num] = (struct vector_3d){
+    triangle_vectors_address[vector_num] = (vector_3d){
       get_random_float(min_x, max_x),
       get_random_float(min_y, max_y),
       get_random_float(min_z, max_z),
@@ -596,45 +596,45 @@ void fill_random_colours(int *colours_address, int triangle_number) {
   }
 }
 
-void fill_cube_vectors_3d(struct vector_3d *triangle_vectors_address, 
-                          struct vector_3d bottom_left_corner, float cube_size) {
-  struct vector_3d cube_corners[8];
-  cube_corners[0] = (struct vector_3d) {
+void fill_cube_vectors_3d(vector_3d *triangle_vectors_address, 
+                          vector_3d bottom_left_corner, float cube_size) {
+  vector_3d cube_corners[8];
+  cube_corners[0] = (vector_3d) {
     bottom_left_corner.x + 0, 
     bottom_left_corner.y + cube_size, 
     bottom_left_corner.z + 0};
 
-  cube_corners[1] = (struct vector_3d) {
+  cube_corners[1] = (vector_3d) {
     bottom_left_corner.x + cube_size, 
     bottom_left_corner.y + cube_size, 
     bottom_left_corner.z + 0};
 
-  cube_corners[2] = (struct vector_3d) {
+  cube_corners[2] = (vector_3d) {
     bottom_left_corner.x + cube_size, 
     bottom_left_corner.y + 0, 
     bottom_left_corner.z + 0};
 
-  cube_corners[3] = (struct vector_3d) {
+  cube_corners[3] = (vector_3d) {
     bottom_left_corner.x + 0, 
     bottom_left_corner.y + 0, 
     bottom_left_corner.z + 0};
 
-  cube_corners[4] = (struct vector_3d) {
+  cube_corners[4] = (vector_3d) {
     bottom_left_corner.x + 0, 
     bottom_left_corner.y + 0, 
     bottom_left_corner.z + cube_size};
 
-  cube_corners[5] = (struct vector_3d) {
+  cube_corners[5] = (vector_3d) {
     bottom_left_corner.x + cube_size, 
     bottom_left_corner.y + 0, 
     bottom_left_corner.z + cube_size};
 
-  cube_corners[6] = (struct vector_3d) {
+  cube_corners[6] = (vector_3d) {
     bottom_left_corner.x + cube_size, 
     bottom_left_corner.y + cube_size, 
     bottom_left_corner.z + cube_size};
 
-  cube_corners[7] = (struct vector_3d) {
+  cube_corners[7] = (vector_3d) {
     bottom_left_corner.x + 0, 
     bottom_left_corner.y + cube_size, 
     bottom_left_corner.z + cube_size};

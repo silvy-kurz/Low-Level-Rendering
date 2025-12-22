@@ -36,24 +36,24 @@ int main() {
 
     // Example pixel buffer
     Uint32 *pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
-    struct vector_3d world_origin = {0, 0, 0};
-    struct vector_2d pixels_size_vector = {WIDTH, HEIGHT};
+    vector_3d world_origin = {0, 0, 0};
+    vector_2d pixels_size_vector = {WIDTH, HEIGHT};
     float FOV_input = 60;
     float FOV = FOV_input * (M_PI / 180.0f);
     float smallest_screen_dimension = pixels_size_vector.x;
     
     int triangle_number = 2;
-    struct vector_3d randomised_triangle_vectors[triangle_number * 3];
-    struct vector_2d screen_vectors[triangle_number * 3];
+    vector_3d randomised_triangle_vectors[triangle_number * 3];
+    vector_2d screen_vectors[triangle_number * 3];
     fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
                            0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
 
-    struct vector_3d bottom_left_corner = {-7,-7,-30};
+    vector_3d bottom_left_corner = {-7,-7,-30};
     fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, 14);
     Uint32 randomised_colours[triangle_number];
 
      
-    struct camera main_camera = {
+    camera main_camera = {
     world_origin, 
     0, 0, 0,
     20, 40,
@@ -61,9 +61,9 @@ int main() {
     HEIGHT / WIDTH
     };
       
-    struct frustum_state camera_frustum_data = calculate_frustum_values(main_camera);
+    frustum_state camera_frustum_data = calculate_frustum_values(main_camera);
     // main_camera.yaw = M_PI / 12; 
-    // main_camera.position = (struct vector_3d) {-700, -1000, -500};
+    // main_camera.position = (vector_3d) {-700, -1000, -500};
     
     log_camera(main_camera);
     fill_random_colours(randomised_colours, triangle_number);
@@ -71,7 +71,7 @@ int main() {
     log_triangle_colours(randomised_colours, triangle_number);
     
     int transformation_matrices_amount = 9;
-    struct matrix_4x4 transformation_matrix_buffer[transformation_matrices_amount];
+    matrix_4x4 transformation_matrix_buffer[transformation_matrices_amount];
 
     int matrix_initial_states[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1};
 
