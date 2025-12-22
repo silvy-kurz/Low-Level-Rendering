@@ -70,12 +70,11 @@ int main() {
     log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
     log_triangle_colours(randomised_colours, triangle_number);
     
-    int transformation_matrices_amount = 9;
-    matrix_4x4 transformation_matrix_buffer[transformation_matrices_amount];
+    matrix_4x4 transformation_matrix_buffer[TOTAL_MATRIX_COUNT];
 
     int matrix_initial_states[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    initialise_matrix_buffer(transformation_matrix_buffer, transformation_matrices_amount, matrix_initial_states);
+    initialise_matrix_buffer(transformation_matrix_buffer, matrix_initial_states);
 
 
     update_z_rotation_matrix(&transformation_matrix_buffer[Z_ROTATION_MATRIX], main_camera.yaw);

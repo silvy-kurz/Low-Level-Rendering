@@ -65,7 +65,8 @@ enum matrix_buffer_indexes {
   POSITION_TRANSLATION_MATRIX,
   CAMERA_VIEW_MATRIX,
   PROJECTION_MATRIX,
-  FINAL_MAPPING_MATRIX 
+  FINAL_MAPPING_MATRIX,
+  TOTAL_MATRIX_COUNT
 };
 
 //
@@ -445,8 +446,8 @@ void update_projection_matrix(matrix_4x4 *matrix_address, frustum_state frustum_
   data[15] = 0;
 }
 
-void initialise_matrix_buffer(matrix_4x4 *matrices_buffer, int buffer_size, int *matrix_initial_states) {
-  for (int matrix_index = 0; matrix_index < buffer_size; matrix_index++) {
+void initialise_matrix_buffer(matrix_4x4 *matrices_buffer, int *matrix_initial_states) {
+  for (int matrix_index = 0; matrix_index < TOTAL_MATRIX_COUNT; matrix_index++) {
     switch (matrix_initial_states[matrix_index]) {
       case 0:
         initialise_null_matrix_4x4(&matrices_buffer[matrix_index]);
