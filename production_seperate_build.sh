@@ -4,11 +4,12 @@
 BUILD_DIR="build"
 SRC_DIR="src"
 TESTS_DIR="tests"
+INCLUDE_DIR="include"
 BIN_DIR="bin"
 
 # Common GCC flags (warnings, debug info, include path)
 # CFLAGS="-Wall -Wextra -g -I$INCLUDE_DIR"
-CFLAGS="-g"
+CFLAGS="-g -I$INCLUDE_DIR"
 
 # Linker Flags:
 # Use pkg-config to get necessary SDL2 flags (cflags and libs)
@@ -29,8 +30,11 @@ build_main() {
   APP_NAME="render"
   echo "--- Building Main Application: $APP_NAME ---"
 
+  # Compile the main application source files
+  APP_SRC_FILES=$(find $SRC_DIR -name "*.c" ! -name "*test*.c" ! -name "test_*.c")
+
   # Compile and link
-  gcc $CFLAGS "src/main.c" -o $BUILD_DIR/$APP_NAME $LDFLAGS
+  gcc $CFLAGS $APP_SRC_FILES -o $BUILD_DIR/$APP_NAME $LDFLAGS
 
   if [ $? -eq 0 ]; then
     mv $BUILD_DIR/$APP_NAME $BIN_DIR/$APP_NAME
@@ -48,7 +52,7 @@ build_tests() {
   TEST_SRC_FILES=$(find $TESTS_DIR -name "*.c")
 
   # Compile and link the library code with the test runner's main() function
-  gcc $CFLAGS tests/main.c -o $BUILD_DIR/$TEST_EXEC $LDFLAGS
+  gcc $CFLAGS $LIB_SRC_FILES $TEST_SRC_FILES -o $BUILD_DIR/$TEST_EXEC $LDFLAGS
 
   if [ $? -eq 0 ]; then
     echo "Tests build successful!"

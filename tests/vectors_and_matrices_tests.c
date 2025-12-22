@@ -1,4 +1,4 @@
-#include "vectors_and_matrices.h"
+#include "../src/vectors_and_matrices.c"
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>
@@ -8,12 +8,12 @@
 
 
 
-int main(int argc, char *argv[])
+int all_tests(int argc, char *argv[])
 {
-  struct vector_2d testing_vector_2d_a = {7,2};
-  struct vector_2d testing_vector_2d_b = {-1,2};
-  struct vector_2d testing_vector_2d_c = {6,6};
-  struct vector_2d testing_vector_2d_d = {0,0};
+  vector_2d testing_vector_2d_a = {7,2};
+  vector_2d testing_vector_2d_b = {-1,2};
+  vector_2d testing_vector_2d_c = {6,6};
+  vector_2d testing_vector_2d_d = {0,0};
 
   printf("2D testing vectors:\n");
   printf("a = ");
@@ -52,10 +52,10 @@ int main(int argc, char *argv[])
 
 
 
-  struct vector_3d testing_vector_3d_a = {7,2, 3};
-  struct vector_3d testing_vector_3d_b = {-1,2, 1};
-  struct vector_3d testing_vector_3d_c = {6, 6, 6};
-  struct vector_3d testing_vector_3d_d = {0, 0, 0};
+  vector_3d testing_vector_3d_a = {7,2, 3};
+  vector_3d testing_vector_3d_b = {-1,2, 1};
+  vector_3d testing_vector_3d_c = {6, 6, 6};
+  vector_3d testing_vector_3d_d = {0, 0, 0};
 
   printf(" \n");
   printf(" \n");
@@ -114,10 +114,10 @@ int main(int argc, char *argv[])
   printf(" \n");
   printf(" \n");
   printf(" \n");
-  struct matrix_3x3 A3;
-  struct matrix_3x3 B3;
-  struct matrix_3x3 P3;
-  struct vector_3d v3 = { 1, 2, 3 };
+  matrix_3x3 A3;
+  matrix_3x3 B3;
+  matrix_3x3 P3;
+  vector_3d v3 = { 1, 2, 3 };
 
   initialise_identity_matrix_3x3(&A3);
   initialise_null_matrix_3x3(&B3);
@@ -147,10 +147,10 @@ int main(int argc, char *argv[])
   //
   // ======== 4x4 MATRIX TESTING ========
   //
-  struct matrix_4x4 A4;
-  struct matrix_4x4 B4;
-  struct matrix_4x4 P4;
-  struct vector_4d v4 = { 2, 4, 6, 1 };
+  matrix_4x4 A4;
+  matrix_4x4 B4;
+  matrix_4x4 P4;
+  vector_4d v4 = { 2, 4, 6, 1 };
 
   initialise_identity_matrix_4x4(&A4);
   initialise_null_matrix_4x4(&B4);
@@ -180,9 +180,9 @@ int main(int argc, char *argv[])
   //
   // ======== N×M MATRIX TESTING ========
   //
-  struct matrix_n_m N1;
-  struct matrix_n_m N2;
-  struct matrix_n_m NP;
+  matrix_n_m N1;
+  matrix_n_m N2;
+  matrix_n_m NP;
 
   N1.rows = 3; N1.columns = 3;
   N2.rows = 3; N2.columns = 3;
@@ -220,9 +220,9 @@ int main(int argc, char *argv[])
   //
   // ======== ROTATION MATRIX TESTS ========
   //
-  struct matrix_4x4 R1;
-  struct matrix_4x4 R2;
-  struct matrix_4x4 R3;
+  matrix_4x4 R1;
+  matrix_4x4 R2;
+  matrix_4x4 R3;
 
   initialise_identity_matrix_4x4(&R1);
   printf("\nRotation X 45deg:\n");
@@ -244,11 +244,11 @@ int main(int argc, char *argv[])
   //
   // ======== TRIANGLE TESTING ========
   //
-  struct vector_2d ta = {0,0};
-  struct vector_2d tb = {5,0};
-  struct vector_2d tc = {2,4};
-  struct vector_2d tp1 = {2,1};
-  struct vector_2d tp2 = {6,1};
+  vector_2d ta = {0,0};
+  vector_2d tb = {5,0};
+  vector_2d tc = {2,4};
+  vector_2d tp1 = {2,1};
+  vector_2d tp2 = {6,1};
   float c1 = cross_product_vector_2d(subtract_vector_2d(tb, ta),
                                    subtract_vector_2d(tp1, ta));
   float c2 = cross_product_vector_2d(subtract_vector_2d(tc, tb),
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
   //
   // ======== RANDOM GENERATION TESTING ========
   //
-  struct vector_3d random_vecs[5];
+  vector_3d random_vecs[5];
   int random_cols[5];
 
   printf("\nRandom vector fill:\n");

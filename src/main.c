@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "vectors_and_matrices.h"
+#include "vectors_and_matrices.c"
 #define WIDTH 2000  
 #define HEIGHT 2000 
 
