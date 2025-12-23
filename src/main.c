@@ -1,10 +1,13 @@
+#include "vectors_and_matrices.c"
+#include "screen_and_scene.c"
+
+
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "vectors_and_matrices.c"
 #define WIDTH 2000  
 #define HEIGHT 2000 
 
@@ -33,24 +36,40 @@ int main() {
 
     bool running = true;
     SDL_Event event;
+    int maximum_triangle_amount = 40000;
 
-    // Example pixel buffer
-    Uint32 *pixels = malloc(WIDTH * HEIGHT * sizeof(Uint32));
+    size_t pixels_buffer_size = sizeof(Uint32) * WIDTH * HEIGHT;
+    size_t triangle_colours_size = sizeof(Uint32) * maximum_triangle_amount;
+    size_t screen_vectors_size = sizeof(vector_2d) * maximum_triangle_amount * 3;
+    size_t world_vectors_size = sizeof(vector_3d) * maximum_triangle_amount * 3;
+    size_t MAXIMUM_SCREEN_MEMORY_REQUIREMENT = pixels_buffer_size + 
+                                               screen_vectors_size + 
+                                               world_vectors_size + 
+                                               triangle_colours_size; 
+
+
+    memory_arena screen_arena = {
+      .capacity = MAXIMUM_SCREEN_MEMORY_REQUIREMENT,
+      .memory = malloc(MAXIMUM_SCREEN_MEMORY_REQUIREMENT),
+      .current_address_offset = 0,
+    };
+
+    Uint32 *pixels = allocate_arena_space(pixels_buffer_size, &screen_arena);
+    Uint32 *triangle_colours = allocate_arena_space(triangle_colours_size, &screen_arena);
+    vector_2d *screen_vectors = allocate_arena_space(screen_vectors_size, &screen_arena);
+    vector_3d *world_vectors = allocate_arena_space(world_vectors_size, &screen_arena);
+
+
     vector_3d world_origin = {0, 0, 0};
-    vector_2d pixels_size_vector = {WIDTH, HEIGHT};
     float FOV_input = 60;
-    float FOV = FOV_input * (M_PI / 180.0f);
-    float smallest_screen_dimension = pixels_size_vector.x;
     
     int triangle_number = 2;
-    vector_3d randomised_triangle_vectors[triangle_number * 3];
-    vector_2d screen_vectors[triangle_number * 3];
-    fill_random_vectors_3d(randomised_triangle_vectors, triangle_number,
+     
+    fill_random_vectors_3d(world_vectors, triangle_number,
                            0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
 
     vector_3d bottom_left_corner = {-7,-7,-30};
-    fill_cube_vectors_3d(randomised_triangle_vectors, bottom_left_corner, 14);
-    Uint32 randomised_colours[triangle_number];
+    fill_cube_vectors_3d(world_vectors, bottom_left_corner, 14);
 
      
     camera main_camera = {
@@ -66,9 +85,9 @@ int main() {
     // main_camera.position = (vector_3d) {-700, -1000, -500};
     
     log_camera(main_camera);
-    fill_random_colours(randomised_colours, triangle_number);
-    log_triangle_vectors_3d(randomised_triangle_vectors, triangle_number);
-    log_triangle_colours(randomised_colours, triangle_number);
+    fill_random_colours(triangle_colours, triangle_number);
+    log_triangle_vectors_3d(world_vectors, triangle_number);
+    log_triangle_colours(triangle_colours, triangle_number);
     
     matrix_4x4 transformation_matrix_buffer[TOTAL_MATRIX_COUNT];
 
@@ -85,7 +104,7 @@ int main() {
     calculate_mapping_matrix(transformation_matrix_buffer);
     log_matrix_4x4(transformation_matrix_buffer[8]);
     map_world_space_vectors_to_screen_coordinates(
-    randomised_triangle_vectors, screen_vectors, 
+    world_vectors, screen_vectors, 
     &transformation_matrix_buffer[FINAL_MAPPING_MATRIX], triangle_number,
     WIDTH, HEIGHT);
 
@@ -183,7 +202,7 @@ int main() {
         calculate_mapping_matrix(transformation_matrix_buffer);
 
         map_world_space_vectors_to_screen_coordinates(
-          randomised_triangle_vectors, screen_vectors, 
+          world_vectors, screen_vectors, 
           &transformation_matrix_buffer[FINAL_MAPPING_MATRIX], triangle_number,
         WIDTH, HEIGHT);
 
@@ -201,7 +220,7 @@ int main() {
         
 
         // Recolour any pixels that pass rasterising check to random colour
-        rasterise_screen_coordinates(screen_vectors, triangle_number, randomised_colours, pixels, WIDTH);
+        rasterise_screen_coordinates(screen_vectors, triangle_number, triangle_colours, pixels, WIDTH);
 
         // Update texture with new pixels
         SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(Uint32));
@@ -212,7 +231,7 @@ int main() {
         SDL_RenderPresent(renderer);
     }
 
-    free(pixels);
+    free(screen_arena.memory);
 
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
