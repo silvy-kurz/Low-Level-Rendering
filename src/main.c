@@ -8,6 +8,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
 #define WIDTH 2000  
 #define HEIGHT 2000 
 
@@ -113,10 +115,12 @@ int main() {
 
     const float MOVE_SPEED  = 0.1f;
     const float ANGLE_SPEED = 5.0f * (M_PI / 180.0f);  // degrees per frame (or rad, your choice
-  
+    struct timespec start, end;  
     // running = false; 
     while (running) {
-        // Handle events
+        clock_gettime(CLOCK_MONOTONIC, &start);
+
+
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT)
                 running = false;
@@ -214,7 +218,7 @@ int main() {
         // Fill the buffer with black 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                pixels[y * WIDTH + x] = (Uint32) (255 << 24) | (0 << 16) | (0 << 8) | 0;
+                pixels[y * WIDTH + x] = (Uint32) ((Uint32) 255 << 24) | (0 << 16) | (0 << 8) | 0;
             }
         }
         
@@ -229,6 +233,14 @@ int main() {
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
+
+        clock_gettime(CLOCK_MONOTONIC, &end);
+
+        // Calculate time in milliseconds
+        double elapsed_ms = (end.tv_sec - start.tv_sec) * 1000.0 + 
+                           (end.tv_nsec - start.tv_nsec) / 1000000.0;
+
+        printf("Frame Time: %.2f ms\n", elapsed_ms);       // Handle events
     }
 
     free(screen_arena.memory);
