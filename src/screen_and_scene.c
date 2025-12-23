@@ -20,9 +20,10 @@ void *allocate_arena_space(size_t data_size, memory_arena *arena) {
 
   if (arena->current_address_offset + data_size > arena->capacity) {
     printf("Arena is Full or too much data is being requested!\n");
+    return 0; 
   } else {
     requested_address = arena->memory + arena->current_address_offset;
     arena->current_address_offset += data_size;
+    return requested_address;
   }
-  return requested_address;
 }
