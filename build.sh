@@ -63,7 +63,7 @@ build_tests() {
 }
 
 build_main_with_warnings() {
-  CFLAGS="-g -Wall -Wextra -Werror"
+  CFLAGS="-g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
 
   APP_NAME="render"
   echo "--- Building Main Application: $APP_NAME ---"
@@ -81,7 +81,7 @@ build_main_with_warnings() {
 }
 
 build_tests_with_warnings() {
-  CFLAGS="-g -Wall -Wextra -Werror"
+  CFLAGS="-g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
 
   TEST_EXEC="testexec"
   echo "--- Building Tests: $TEST_EXEC ---"

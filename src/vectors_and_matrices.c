@@ -129,7 +129,8 @@ vector_3d divide_vector_3d_scalar(vector_3d vector, float scalar) {
 
 vector_3d cross_product_vector_3d(vector_3d vector_a, vector_3d vector_b) {
   printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
-  return (vector_3d) {0,0,0}; //TODO: Add in cross product implementation 
+  return (vector_3d) {vector_a.x * vector_b.x * 0, vector_a.y * vector_b.y * 0,vector_a.z * vector_b.z * 0}; //TODO: Add in cross product implementation 
+  //
 }
 
 float length_vector_3d(vector_3d vector) {
@@ -143,7 +144,7 @@ vector_3d normalise_vector_3d(vector_3d vector) {
 
 vector_3d perpendicularise_vector_3d(vector_3d vector) {
   printf("(3D CROSS PRODUCT LOGIC NOT IMPLEMENTED YET)");
-  return (vector_3d) {0,0,0}; //TODO: Add in 3d vector perpendicular implementation
+  return (vector_3d) {vector.x * 0, vector.y * 0, vector.z * 0}; //TODO: Add in 3d vector perpendicular implementation
 }
 float dot_product_vector_3d(vector_3d vector_a, vector_3d vector_b) {
   return vector_a.x + vector_b.x + vector_a.y + vector_b.y + vector_a.z + vector_b.z;
@@ -378,6 +379,8 @@ void initialise_identity_matrix_n_m(matrix_n_m *matrix_address) {
 
 void multiply_matrix_n_m(matrix_n_m *matrix_a_address, matrix_n_m *matrix_b_address, matrix_n_m *product_matrix_address) {
   initialise_null_matrix_n_m(product_matrix_address); //TODO: Implement general matrix multiplication
+  set_element_matrix_n_m(product_matrix_address, 0, 0, matrix_a_address->data[0]);
+  set_element_matrix_n_m(product_matrix_address, 1, 1, matrix_b_address->data[0]);
 }
 
 //
@@ -614,7 +617,7 @@ void log_triangle_vectors_3d(vector_3d *triangle_vectors, int triangle_number) {
   }
 }
 
-void log_triangle_colours(int *colours, int triangle_number) {
+void log_triangle_colours(Uint32 *colours, int triangle_number) {
   for (int colour_index = 0; colour_index < triangle_number; colour_index++) {
     log_colour(colours[colour_index]);
   }
@@ -648,7 +651,7 @@ void fill_random_vectors_3d(vector_3d *triangle_vectors_address, int triangle_nu
   }
 }
 
-void fill_random_colours(int *colours_address, int triangle_number) {
+void fill_random_colours(Uint32 *colours_address, int triangle_number) {
   for (int colour_num = 0; colour_num < triangle_number; colour_num++) {
       Uint8 r = get_random_integer(0, 255); 
       Uint8 g = get_random_integer(0, 255); 
