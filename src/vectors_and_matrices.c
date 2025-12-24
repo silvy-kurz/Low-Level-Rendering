@@ -713,5 +713,50 @@ void fill_cube_vectors_3d(vector_3d *triangle_vectors_address,
   triangle_vectors_address[3] = cube_corners[0];
   triangle_vectors_address[4] = cube_corners[2];
   triangle_vectors_address[5] = cube_corners[3];
+
+  // third triangle
+  triangle_vectors_address[6] = cube_corners[7];
+  triangle_vectors_address[7] = cube_corners[0];
+  triangle_vectors_address[8] = cube_corners[3];
+  // fourth triangle
+  triangle_vectors_address[9] = cube_corners[7];
+  triangle_vectors_address[10] = cube_corners[3];
+  triangle_vectors_address[11] = cube_corners[4];
+
+ // FIFTH TRIANGLE (Right Face)
+  triangle_vectors_address[12] = cube_corners[1];
+  triangle_vectors_address[13] = cube_corners[6];
+  triangle_vectors_address[14] = cube_corners[5];
+  // SIXTH TRIANGLE
+  triangle_vectors_address[15] = cube_corners[1];
+  triangle_vectors_address[16] = cube_corners[5];
+  triangle_vectors_address[17] = cube_corners[2];
+
+  // SEVENTH TRIANGLE (Back Face)
+  triangle_vectors_address[18] = cube_corners[6];
+  triangle_vectors_address[19] = cube_corners[7];
+  triangle_vectors_address[20] = cube_corners[4];
+  // EIGHTH TRIANGLE
+  triangle_vectors_address[21] = cube_corners[6];
+  triangle_vectors_address[22] = cube_corners[4];
+  triangle_vectors_address[23] = cube_corners[5];
+
+  // NINTH TRIANGLE (Top Face)
+  triangle_vectors_address[24] = cube_corners[7];
+  triangle_vectors_address[25] = cube_corners[6];
+  triangle_vectors_address[26] = cube_corners[1];
+  // TENTH TRIANGLE
+  triangle_vectors_address[27] = cube_corners[7];
+  triangle_vectors_address[28] = cube_corners[1];
+  triangle_vectors_address[29] = cube_corners[0];
+
+  // ELEVENTH TRIANGLE (Bottom Face)
+  triangle_vectors_address[30] = cube_corners[3];
+  triangle_vectors_address[31] = cube_corners[2];
+  triangle_vectors_address[32] = cube_corners[5];
+  // TWELFTH TRIANGLE
+  triangle_vectors_address[33] = cube_corners[3];
+  triangle_vectors_address[34] = cube_corners[5];
+  triangle_vectors_address[35] = cube_corners[4];
 }
 

@@ -65,7 +65,7 @@ int main() {
     vector_3d world_origin = {0, 0, 0};
     float FOV_input = 60;
     
-    int triangle_number = 2;
+    int triangle_number = 12;
      
     fill_random_vectors_3d(world_vectors, triangle_number,
                            0, WIDTH / 2- 1, 0, WIDTH / 2- 1,0, WIDTH / 2 - 1);
