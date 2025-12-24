@@ -210,6 +210,8 @@ int main() {
           &transformation_matrix_buffer[FINAL_MAPPING_MATRIX], triangle_number,
         WIDTH, HEIGHT);
 
+        log_triangle_vectors_2d(screen_vectors, triangle_number);
+
         // For debugging
         printf("pos: (%f, %f, %f) | yaw: %f pitch: %f roll: %f\n",
             main_camera.position.x, main_camera.position.y, main_camera.position.z, 

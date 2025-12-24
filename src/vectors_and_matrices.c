@@ -606,8 +606,18 @@ void log_colour(int colour) {
 }
 
 void log_triangle_vectors_2d(vector_2d *triangle_vectors, int triangle_number) {
-  for (int vector_index = 0; vector_index < triangle_number * 3; vector_index++) {
-    log_vector_2d(triangle_vectors[vector_index]);
+  for (int triangle_index = 0; triangle_index < triangle_number; triangle_index++) {
+    printf("Triangle %d:\n", triangle_index);
+    printf("  ");
+    log_vector_2d(triangle_vectors[triangle_index * 3]);
+    printf("\n");
+    printf("  ");
+    log_vector_2d(triangle_vectors[triangle_index * 3 + 1]);
+    printf("\n");
+    printf("  ");
+    log_vector_2d(triangle_vectors[triangle_index * 3 + 2]);
+    printf("\n");
+    printf("  \n");
   }
 }
 
