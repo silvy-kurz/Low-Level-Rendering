@@ -62,27 +62,27 @@ build_tests() {
 
 case "$1:$2:$3" in
 main:"":"")
-  CFLAGS="-g "
+  CFLAGS="-g -std=c99 "
   build_main
   ;;
 main:warn:"")
-  CFLAGS="-g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
+  CFLAGS="-g -std=c99 -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
   build_main
   ;;
 tests:"":"")
-  CFLAGS="-g "
+  CFLAGS="-g -std=c99 "
   build_tests
   ;;
 tests:warn:"")
-  CFLAGS="-g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
+  CFLAGS="-g -std=c99 -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
   build_tests
   ;;
 main:fast:"")
-  CFLAGS="-g -O3"
+  CFLAGS="-g -std=c99 -O3"
   build_main
   ;;
 main:fast:warn)
-  CFLAGS="-g -O3 -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
+  CFLAGS="-g -std=c99 -O3 -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined"
   build_main
   ;;
 *)
