@@ -521,7 +521,7 @@ void rasterise_screen_coordinates(vector_2d *screen_coordinates,
     vector_2d triangle_vector_c = screen_coordinates[triangle_index * 3 + 2];
     
     int min_x = fmin(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_c.x));
-    int max_x = fmax(triangle_vector_a.x, fmin(triangle_vector_b.x, triangle_vector_b.x));
+    int max_x = fmax(triangle_vector_a.x, fmax(triangle_vector_b.x, triangle_vector_c.x));
     int min_y = fmin(triangle_vector_a.y, fmin(triangle_vector_b.y, triangle_vector_c.y));
     int max_y = fmax(triangle_vector_a.y, fmax(triangle_vector_b.y, triangle_vector_c.y));
           
