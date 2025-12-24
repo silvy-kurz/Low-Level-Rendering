@@ -9,10 +9,10 @@
 
 
 
-int main(int argc, char *argv[])
-{
+int main() {
   printf("All tests of all modules results go here!\n");
   arena_tests();
+  all_tests();
   return 0;
 }
 

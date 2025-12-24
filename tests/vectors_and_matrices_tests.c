@@ -8,7 +8,7 @@
 
 
 
-int all_tests(int argc, char *argv[])
+int all_tests()
 {
   vector_2d testing_vector_2d_a = {7,2};
   vector_2d testing_vector_2d_b = {-1,2};
@@ -180,6 +180,7 @@ int all_tests(int argc, char *argv[])
   //
   // ======== N×M MATRIX TESTING ========
   //
+  
   matrix_n_m N1;
   matrix_n_m N2;
   matrix_n_m NP;
@@ -234,10 +235,10 @@ int all_tests(int argc, char *argv[])
   update_y_rotation_matrix(&R1, 3.1415926f / 3);
   log_matrix_4x4(R1);
 
-  initialise_identity_matrix_4x4(&R1);
+  initialise_identity_matrix_4x4(&R3);
   printf("\nRotation Z 90deg:\n");
-  update_z_rotation_matrix(&R1, 3.1415926f / 2);
-  log_matrix_4x4(R1);
+  update_z_rotation_matrix(&R3, 3.1415926f / 2);
+  log_matrix_4x4(R3);
 
 
 
@@ -273,15 +274,12 @@ int all_tests(int argc, char *argv[])
   //
   // ======== RANDOM GENERATION TESTING ========
   //
-  vector_3d random_vecs[5];
-  int random_cols[5];
+  Uint32 random_cols[5];
 
   printf("\nRandom vector fill:\n");
-  fill_random_vectors_3d(random_vecs, 5, -10, 10, -10, 10, -10, 10);
 
   for (int i = 0; i < 5; i++) {
     printf("vec[%d] = ", i);
-    log_vector_3d(random_vecs[i]);
   }
 
   printf("\nRandom colours:\n");

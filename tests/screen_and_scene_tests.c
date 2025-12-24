@@ -17,17 +17,18 @@ int arena_tests()
     .current_address_offset = 0,
   };
   
-  printf("%d memory\n", testing_arena.memory);
-  printf("%d offset\n", testing_arena.current_address_offset);
+  printf("%p memory\n", testing_arena.memory);
+  printf("%ld offset\n", testing_arena.current_address_offset);
   vector_3d *vec_list = allocate_arena_space(sizeof(vector_3d) * 4, &testing_arena);
-  printf("%d given memory\n", vec_list);
-  printf("%d offset\n", testing_arena.current_address_offset);
-  printf("%d memory\n", testing_arena.memory);
+  printf("%p given memory\n", vec_list);
+  printf("%ld offset\n", testing_arena.current_address_offset);
+  printf("%p memory\n", testing_arena.memory);
   vector_2d *screen_vec_list = allocate_arena_space(sizeof(vector_4d) * 2, &testing_arena);
-  printf("%d given memory\n", screen_vec_list);
-  printf("%d offset\n", testing_arena.current_address_offset);
-  printf("%d memory\n", testing_arena.memory);
-
+  printf("%p given memory\n", screen_vec_list);
+  printf("%ld offset\n", testing_arena.current_address_offset);
+  printf("%p memory\n", testing_arena.memory);
+  
+  free(testing_arena.memory);
   return 0;
 }
 
