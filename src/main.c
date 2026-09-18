@@ -212,6 +212,8 @@ main ()
 
       vector_3d camera_forward = { -rotation[8], -rotation[9], -rotation[10] };
 
+      vector_3d camera_up = { rotation[4], rotation[5], rotation[6] };
+
       vector_3d movement = { 0.0f, 0.0f, 0.0f };
 
       if (keys[SDL_SCANCODE_W])
@@ -231,6 +233,20 @@ main ()
           movement = subtract_vector_3d (movement, camera_right);
         }
 
+      if (keys[SDL_SCANCODE_SPACE])
+        {
+          bool shift_held = keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT];
+
+          if (shift_held)
+            {
+              movement = subtract_vector_3d (movement, camera_up);
+            }
+          else
+            {
+              movement = add_vector_3d (movement, camera_up);
+            }
+        }
+
       // Normalising prevents diagonal movement from being faster.
       if (length_vector_3d (movement) > 0.0f)
         {
@@ -248,8 +264,6 @@ main ()
       map_world_space_vectors_to_screen_coordinates (world_vectors, screen_vectors,
                                                      &transformation_matrix_buffer[FINAL_MAPPING_MATRIX],
                                                      triangle_number, WIDTH, HEIGHT);
-
-      log_triangle_vectors_2d (screen_vectors, triangle_number);
 
       // For debugging
       printf ("pos: (%f, %f, %f) | yaw: %f pitch: %f roll: %f\n", main_camera.position.x, main_camera.position.y,
