@@ -149,35 +149,6 @@ main ()
       // --- Get keyboard state for smooth movement ---
       const Uint8 *keys = SDL_GetKeyboardState (NULL);
 
-      // Movement: W A S D
-      if (keys[SDL_SCANCODE_W])
-        {
-          main_camera.position.z -= MOVE_SPEED;
-          update_translation_matrix (&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX],
-                                     multiply_vector_3d_scalar (main_camera.position, -1.0f));
-        }
-
-      if (keys[SDL_SCANCODE_S])
-        {
-          main_camera.position.z += MOVE_SPEED;
-          update_translation_matrix (&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX],
-                                     multiply_vector_3d_scalar (main_camera.position, -1.0f));
-        }
-
-      if (keys[SDL_SCANCODE_A])
-        {
-          main_camera.position.x -= MOVE_SPEED;
-          update_translation_matrix (&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX],
-                                     multiply_vector_3d_scalar (main_camera.position, -1.0f));
-        }
-
-      if (keys[SDL_SCANCODE_D])
-        {
-          main_camera.position.x += MOVE_SPEED;
-          update_translation_matrix (&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX],
-                                     multiply_vector_3d_scalar (main_camera.position, -1.0f));
-        }
-
       // moving up and down
       if (keys[SDL_SCANCODE_E])
         {
@@ -230,6 +201,48 @@ main ()
           update_z_rotation_matrix (&transformation_matrix_buffer[X_ROTATION_MATRIX], main_camera.roll);
         }
 
+      calculate_mapping_matrix (transformation_matrix_buffer);
+
+      // Refresh the combined rotation using the current rotation matrices.
+      calculate_mapping_matrix (transformation_matrix_buffer);
+
+      float *rotation = transformation_matrix_buffer[X_Y_Z_ROTATION_MATRIX].data;
+
+      vector_3d camera_right = { rotation[0], rotation[1], rotation[2] };
+
+      vector_3d camera_forward = { -rotation[8], -rotation[9], -rotation[10] };
+
+      vector_3d movement = { 0.0f, 0.0f, 0.0f };
+
+      if (keys[SDL_SCANCODE_W])
+        {
+          movement = add_vector_3d (movement, camera_forward);
+        }
+      if (keys[SDL_SCANCODE_S])
+        {
+          movement = subtract_vector_3d (movement, camera_forward);
+        }
+      if (keys[SDL_SCANCODE_D])
+        {
+          movement = add_vector_3d (movement, camera_right);
+        }
+      if (keys[SDL_SCANCODE_A])
+        {
+          movement = subtract_vector_3d (movement, camera_right);
+        }
+
+      // Normalising prevents diagonal movement from being faster.
+      if (length_vector_3d (movement) > 0.0f)
+        {
+          movement = multiply_vector_3d_scalar (normalise_vector_3d (movement), MOVE_SPEED);
+
+          main_camera.position = add_vector_3d (main_camera.position, movement);
+        }
+
+      update_translation_matrix (&transformation_matrix_buffer[POSITION_TRANSLATION_MATRIX],
+                                 multiply_vector_3d_scalar (main_camera.position, -1.0f));
+
+      // Refresh the final mapping after changing the camera position.
       calculate_mapping_matrix (transformation_matrix_buffer);
 
       map_world_space_vectors_to_screen_coordinates (world_vectors, screen_vectors,
