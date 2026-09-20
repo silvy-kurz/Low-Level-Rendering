@@ -1,5 +1,15 @@
-#include "screen_and_scene.c"
+#include "types.c"
+
+#include "logging.c"
+
 #include "vectors_and_matrices.c"
+
+#include "pipeline.c"
+#include "rasteriser.c"
+
+#include "scene_filling.c"
+
+#include "mem_arena.c"
 
 #include <SDL2/SDL.h>
 #include <math.h>
